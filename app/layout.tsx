@@ -1,9 +1,14 @@
-import type { Metadata } from "next";
 import { Outfit } from "next/font/google";
-import "./globals.css";
+import { HEADER_HEIGHT, PAGE_WIDTH } from "@/lib/consts";
+import { Header } from "@/components/custom/header";
+import { Footer } from "@/components/custom/footer";
+import { ThemeProvider } from "@/components/theme/theme-provider";
 import { cn } from "@/lib/utils";
+import type { Metadata } from "next";
+import NextTopLoader from "nextjs-toploader";
+import "./globals.css";
 
-const outfit = Outfit({ subsets: ["latin"], variable: "--font-sans" });
+const outfit = Outfit({ subsets: ["latin"], variable: "--font-outfit" });
 
 export const metadata: Metadata = {
   title: "Library Manager",
@@ -19,9 +24,25 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={cn("h-full", "antialiased", "font-sans", outfit.variable)}
+      className={`${cn("h-full", "antialiased", "font-sans", outfit.variable)} flex flex-col items-center`}
+      suppressHydrationWarning
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body
+        style={{ width: PAGE_WIDTH, paddingTop: HEADER_HEIGHT }}
+        className="min-h-full flex flex-col"
+      >
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <NextTopLoader />
+          <Header />
+          {children}
+          <Footer />
+        </ThemeProvider>
+      </body>
     </html>
   );
 }
