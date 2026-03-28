@@ -5,7 +5,9 @@ import { Footer } from "@/components/custom/footer";
 import { ThemeProvider } from "@/components/theme/theme-provider";
 import { cn } from "@/lib/utils";
 import type { Metadata } from "next";
+import { Toaster } from "@/components/ui/sonner";
 import NextTopLoader from "nextjs-toploader";
+
 import "./globals.css";
 
 const outfit = Outfit({ subsets: ["latin"], variable: "--font-outfit" });
@@ -30,6 +32,7 @@ export default function RootLayout({
       <body
         style={{ width: PAGE_WIDTH, paddingTop: HEADER_HEIGHT }}
         className="min-h-full flex flex-col"
+        suppressHydrationWarning
       >
         <ThemeProvider
           attribute="class"
@@ -38,6 +41,7 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <NextTopLoader />
+          <Toaster />
           <Header />
           {children}
           <Footer />
