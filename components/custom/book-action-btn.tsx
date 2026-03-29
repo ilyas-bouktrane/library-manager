@@ -29,54 +29,50 @@ import {
 import { Button } from "../ui/button";
 import { Settings2, SquarePen, Trash } from "lucide-react";
 import { useActionState, useEffect, useState } from "react";
-import { deleteMember, updateMember } from "@/app/actions/member";
 import { useRouter } from "nextjs-toploader/app";
 import { toast } from "sonner";
 import { Input } from "../ui/input";
-import { Member } from "@/generated/prisma/client";
+import { Book } from "@/generated/prisma/client";
 import { isEqual } from "lodash";
+import { deleteBook, updateBook } from "@/app/actions/book";
 
-export const MemberOptionsButton = ({
-  prevMemberData,
-}: {
-  prevMemberData: Member;
-}) => {
+export const BookActionButton = ({ prevBookData }: { prevBookData: Book }) => {
   const router = useRouter();
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [showEditDialog, setShowEditDialog] = useState(false);
 
-  const [deleteMemberState, deleteMemberAction, deleteMemberIsPending] =
-    useActionState(deleteMember, { timestamp: 0, success: false });
-  const [updateMemberState, updateMemberAction, updateMemberIsPending] =
-    useActionState(updateMember, {
+  const [deleteBookState, deleteBookAction, deleteBookIsPending] =
+    useActionState(deleteBook, { timestamp: 0, success: false });
+  const [updateBookState, updateBookAction, updateBookIsPending] =
+    useActionState(updateBook, {
       timestamp: 0,
       success: false,
-      emailTaken: false,
+      barCodeTaken: false,
     });
 
-  const [memberData, setMemberData] = useState<Member>(prevMemberData);
+  const [bookData, setBookData] = useState<Book>(prevBookData);
 
   useEffect(() => {
-    if (deleteMemberState.success) {
+    if (deleteBookState.success) {
       router.refresh();
-      toast.success("Member deleted permanently.", { position: "top-center" });
+      toast.success("Book deleted permanently.", { position: "top-center" });
       setShowDeleteDialog(false);
-    } else if (!deleteMemberState.success && deleteMemberState.timestamp) {
-      toast.error("Could not delete the member.", { position: "top-center" });
+    } else if (!deleteBookState.success && deleteBookState.timestamp) {
+      toast.error("Could not delete the book.", { position: "top-center" });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [deleteMemberState.timestamp]);
+  }, [deleteBookState.timestamp]);
 
   useEffect(() => {
-    if (updateMemberState.success) {
+    if (updateBookState.success) {
       router.refresh();
-      toast.success("Member updated successfully.", { position: "top-center" });
+      toast.success("Book updated successfully.", { position: "top-center" });
       setShowEditDialog(false);
-    } else if (!updateMemberState.success && updateMemberState.timestamp) {
-      toast.error("Could not update the member.", { position: "top-center" });
+    } else if (!updateBookState.success && updateBookState.timestamp) {
+      toast.error("Could not update the book.", { position: "top-center" });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [updateMemberState.timestamp]);
+  }, [updateBookState.timestamp]);
 
   return (
     <DropdownMenu>
@@ -105,80 +101,80 @@ export const MemberOptionsButton = ({
                 <DialogTitle hidden />
                 <DialogDescription hidden />
                 <FieldSet>
-                  <FieldLegend>Edit Member</FieldLegend>
+                  <FieldLegend>Edit Book</FieldLegend>
                   <FieldDescription>
-                    You must enter an email that has not been chosen
+                    The bar code must be unique.
                   </FieldDescription>
-                  <form action={updateMemberAction}>
+                  <form action={updateBookAction}>
                     <input
                       type="text"
                       name="id"
                       hidden
-                      defaultValue={prevMemberData.id}
+                      defaultValue={prevBookData.id}
                     />
                     <FieldGroup>
                       <Field>
-                        <FieldLabel htmlFor="first_name">First Name</FieldLabel>
+                        <FieldLabel htmlFor="bar_code">Bar Code</FieldLabel>
                         <Input
-                          id="first_name"
-                          name="first_name"
+                          id="bar_code"
+                          type="bar_code"
+                          name="bar_code"
                           autoComplete="off"
-                          placeholder="First Name"
-                          value={memberData.first_name}
+                          aria-invalid={updateBookState.barCodeTaken}
+                          placeholder="Bar Code"
+                          value={bookData.bar_code}
                           onChange={(e) =>
-                            setMemberData((prev) => ({
+                            setBookData((prev) => ({
                               ...prev,
-                              first_name: e.target.value,
+                              bar_code: e.target.value,
                             }))
                           }
                         />
-                        <FieldLabel htmlFor="last_name">Last Name</FieldLabel>
-                        <Input
-                          id="last_name"
-                          name="last_name"
-                          autoComplete="off"
-                          placeholder="Last Name"
-                          value={memberData.last_name}
-                          onChange={(e) =>
-                            setMemberData((prev) => ({
-                              ...prev,
-                              last_name: e.target.value,
-                            }))
-                          }
-                        />
-                        <FieldLabel htmlFor="email">Email</FieldLabel>
-                        <Input
-                          id="email"
-                          type="email"
-                          name="email"
-                          autoComplete="off"
-                          aria-invalid={updateMemberState.emailTaken}
-                          placeholder="example@email.com"
-                          value={memberData.email}
-                          onChange={(e) =>
-                            setMemberData((prev) => ({
-                              ...prev,
-                              email: e.target.value,
-                            }))
-                          }
-                        />
-                        {updateMemberState.emailTaken && (
+                        {updateBookState.barCodeTaken && (
                           <FieldError>
-                            This email is already taken. Please chose another
-                            one.
+                            This bar code is already taken.
                           </FieldError>
                         )}
-                        <FieldLabel htmlFor="phone_number">Phone</FieldLabel>
+                        <FieldLabel htmlFor="title">Title</FieldLabel>
                         <Input
-                          id="phone_number"
-                          name="phone_number"
+                          id="title"
+                          name="title"
                           autoComplete="off"
-                          placeholder="+1 (234) 567-8910"
-                          value={memberData.phone_number ?? undefined}
+                          placeholder="Title"
+                          value={bookData.title}
                           onChange={(e) =>
-                            setMemberData((prev) => ({
+                            setBookData((prev) => ({
                               ...prev,
-                              phone_number: e.target.value,
+                              title: e.target.value,
+                            }))
+                          }
+                        />
+                        <FieldLabel htmlFor="author">Author</FieldLabel>
+                        <Input
+                          id="author"
+                          name="author"
+                          autoComplete="off"
+                          placeholder="Author"
+                          value={bookData.author ?? undefined}
+                          onChange={(e) =>
+                            setBookData((prev) => ({
+                              ...prev,
+                              author: e.target.value,
+                            }))
+                          }
+                        />
+                        <FieldLabel htmlFor="phone_number">Quantity</FieldLabel>
+                        <Input
+                          type="number"
+                          id="quantity"
+                          name="quantity"
+                          autoComplete="off"
+                          placeholder="0"
+                          value={bookData.quantity || undefined}
+                          onChange={(e) =>
+                            setBookData((prev) => ({
+                              ...prev,
+                              quantity: Number(e.target.value) ?? undefined,
                             }))
                           }
                         />
@@ -187,8 +183,8 @@ export const MemberOptionsButton = ({
                         <Button
                           type="submit"
                           disabled={
-                            updateMemberIsPending ||
-                            isEqual(prevMemberData, memberData)
+                            updateBookIsPending ||
+                            isEqual(prevBookData, bookData)
                           }
                           className="flex-1"
                         >
@@ -228,22 +224,22 @@ export const MemberOptionsButton = ({
                 <DialogTitle>Are you absolutely sure?</DialogTitle>
                 <DialogDescription>
                   This action cannot be undone. This will permanently delete the
-                  account and remove its data from our servers.
+                  book and remove its data from our servers.
                 </DialogDescription>
                 <div className="flex gap-2 w-full">
-                  <form action={deleteMemberAction} className="flex-1">
+                  <form action={deleteBookAction} className="flex-1">
                     <Button
                       className="w-full"
                       type="submit"
                       variant={"destructive"}
-                      disabled={deleteMemberIsPending}
+                      disabled={deleteBookIsPending}
                     >
                       Permanently Delete
                     </Button>
                     <input
                       type="text"
                       name="id"
-                      defaultValue={prevMemberData.id}
+                      defaultValue={prevBookData.id}
                       hidden
                     />
                   </form>

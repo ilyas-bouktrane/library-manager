@@ -15,12 +15,14 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { db } from "@/lib/db";
-import { MemberOptionsButton } from "@/components/custom/member-options-btn";
+import { MemberActionButton } from "@/components/custom/member-action-btn";
 import { MemberCreateButton } from "@/components/custom/member-create-btn";
 import { SearchInput } from "@/components/search/search-input";
 import { SearchPagination } from "@/components/search/search-pagination";
 import { MAX_PAGE_TAKE } from "@/lib/consts";
 import { safeNumberParse, safeStringParse } from "@/lib/utils";
+import { Users } from "lucide-react";
+import { Prisma } from "@/generated/prisma/client";
 
 export default async function Members({
   searchParams,
@@ -31,26 +33,30 @@ export default async function Members({
   const currentPage = safeNumberParse(p, 1);
   const searchQuery = safeStringParse(q, "");
 
-  const where = {
+  const where: Prisma.MemberWhereInput = {
     OR: [
       {
         email: {
           contains: searchQuery,
+          mode: "insensitive",
         },
       },
       {
         first_name: {
           contains: searchQuery,
+          mode: "insensitive",
         },
       },
       {
         last_name: {
           contains: searchQuery,
+          mode: "insensitive",
         },
       },
       {
         phone_number: {
           contains: searchQuery,
+          mode: "insensitive",
         },
       },
     ],
@@ -71,7 +77,9 @@ export default async function Members({
     <main className="py-4 flex flex-col gap-4">
       <Card>
         <CardHeader>
-          <CardTitle>Members</CardTitle>
+          <CardTitle className="flex gap-1 items-center">
+            <Users size={18} /> Members
+          </CardTitle>
           <CardDescription>
             Manage and view all registered library members.
           </CardDescription>
@@ -105,7 +113,7 @@ export default async function Members({
                     {member.created_at.toLocaleDateString()}
                   </TableCell>
                   <TableCell className="text-right">
-                    <MemberOptionsButton prevMemberData={member} />
+                    <MemberActionButton prevMemberData={member} />
                   </TableCell>
                 </TableRow>
               ))}
