@@ -4,7 +4,7 @@ services:
     image: postgres:alpine
     restart: unless-stopped
     ports:
-      - "8888:5432"
+      - "5432:5432"
     environment:
       - POSTGRES_DB=lib_db
       - POSTGRES_USER=lib_user

@@ -54,7 +54,7 @@ export const BookCreateButton = () => {
         quantity: 0,
       });
     } else if (!createBookState.success && createBookState.timestamp) {
-      toast.success("Failed to create book.", { position: "top-center" });
+      toast.error("Failed to create book.", { position: "top-center" });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [createBookState.timestamp]);
