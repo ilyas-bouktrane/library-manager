@@ -1,8 +1,9 @@
 "use server";
 
 import { Book, Loan, Member, Prisma } from "@/generated/prisma/client";
-import { LOAN_DURATION } from "@/lib/consts";
 import { db } from "@/lib/db";
+import { getSettings } from "@/lib/settings";
+import { addDays } from "date-fns";
 
 type DeleteLoan = {
   timestamp: number;
@@ -61,6 +62,7 @@ export const renewLoan = async (
   _: RenewLoan,
   formData: FormData,
 ): Promise<RenewLoan> => {
+  const { LOAN_DURATION_DAYS } = await getSettings();
   const id = formData.get("id") as string;
 
   try {
@@ -72,7 +74,7 @@ export const renewLoan = async (
         renewal_count: {
           increment: 1,
         },
-        end_date: new Date(prev!.end_date!.getTime() + LOAN_DURATION),
+        end_date: addDays(prev!.end_date!, Number(LOAN_DURATION_DAYS)),
       },
     });
 

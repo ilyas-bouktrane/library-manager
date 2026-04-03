@@ -11,7 +11,13 @@ import { useRouter } from "nextjs-toploader/app";
 import { useEffect, useState } from "react";
 import { usePathname, useSearchParams } from "next/navigation";
 
-export const SearchInput = ({ resultsCount }: { resultsCount: number }) => {
+export const SearchInput = ({
+  resultsCount,
+  placeholder,
+}: {
+  resultsCount: number;
+  placeholder: string;
+}) => {
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const router = useRouter();
@@ -43,7 +49,7 @@ export const SearchInput = ({ resultsCount }: { resultsCount: number }) => {
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           disabled={searchIsPending}
-          placeholder="Search..."
+          placeholder={placeholder}
           onKeyDown={(e) => {
             if (e.key === "Enter") handleSearch();
           }}

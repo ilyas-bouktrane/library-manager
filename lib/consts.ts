@@ -1,7 +1,7 @@
-export const PAGE_WIDTH = "1200px";
+export const DEFAULT_PAGE_WIDTH = "1200px";
 
-export const HEADER_HEIGHT = "55px";
+export const DEFAULT_HEADER_HEIGHT = "55px";
 
-export const MAX_PAGE_TAKE = 20;
+export const DEFAULT_MAX_PAGE_TAKE = 20;
 
-export const LOAN_DURATION = 21 * 24 * 60 * 60 * 1000 // ms
+export const DEFAULT_LOAN_DURATION_DAYS = 21; // days

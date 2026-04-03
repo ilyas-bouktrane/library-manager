@@ -25,12 +25,14 @@ import { Book, Loan, Member } from "@/generated/prisma/client";
 import { useRouter } from "nextjs-toploader/app";
 import { toast } from "sonner";
 import { createLoan } from "@/app/actions/loan";
-import { LOAN_DURATION } from "@/lib/consts";
 import { DatePicker } from "./date-picker";
-
-const INIT_END_DATE = new Date(Date.now() + LOAN_DURATION);
+import { useSettings } from "./settings-context";
+import { addDays } from "date-fns";
 
 export const LoanCreateButton = () => {
+  const { LOAN_DURATION_DAYS } = useSettings();
+  const INIT_END_DATE = addDays(new Date(), Number(LOAN_DURATION_DAYS));
+
   const router = useRouter();
   const [showDialog, setShowDialog] = useState(false);
   const [inputLoanData, setInputLoanData] = useState<
@@ -132,8 +134,8 @@ export const LoanCreateButton = () => {
                     }
                   />
                   <input
-                    hidden
-                    type="text"
+                    readOnly
+                    type="hidden"
                     name="end_date"
                     value={inputLoanData.end_date.toISOString()}
                   />

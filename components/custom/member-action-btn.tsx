@@ -111,10 +111,10 @@ export const MemberActionButton = ({
                   </FieldDescription>
                   <form action={updateMemberAction}>
                     <input
-                      type="text"
+                      readOnly
+                      type="hidden"
                       name="id"
-                      hidden
-                      defaultValue={prevMemberData.id}
+                      value={prevMemberData.id}
                     />
                     <FieldGroup>
                       <Field>
@@ -241,10 +241,10 @@ export const MemberActionButton = ({
                       Permanently Delete
                     </Button>
                     <input
-                      type="text"
+                      readOnly
+                      type="hidden"
                       name="id"
-                      defaultValue={prevMemberData.id}
-                      hidden
+                      value={prevMemberData.id}
                     />
                   </form>
                   <Button

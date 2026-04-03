@@ -17,7 +17,7 @@ import {
 import { db } from "@/lib/db";
 import { SearchInput } from "@/components/search/search-input";
 import { SearchPagination } from "@/components/search/search-pagination";
-import { MAX_PAGE_TAKE } from "@/lib/consts";
+import { DEFAULT_MAX_PAGE_TAKE } from "@/lib/consts";
 import { safeNumberParse, safeStringParse } from "@/lib/utils";
 import { Book } from "lucide-react";
 import { BookActionButton } from "@/components/custom/book-action-btn";
@@ -62,12 +62,12 @@ export default async function Books({
     }),
     db.book.findMany({
       where,
-      take: MAX_PAGE_TAKE,
-      skip: MAX_PAGE_TAKE * (currentPage - 1),
+      take: DEFAULT_MAX_PAGE_TAKE,
+      skip: DEFAULT_MAX_PAGE_TAKE * (currentPage - 1),
     }),
   ]);
 
-  const maxPage = Math.ceil(count / MAX_PAGE_TAKE);
+  const maxPage = Math.ceil(count / DEFAULT_MAX_PAGE_TAKE);
 
   return (
     <main className="py-4 flex flex-col gap-4">
@@ -77,11 +77,14 @@ export default async function Books({
             <Book size={18} /> Books
           </CardTitle>
           <CardDescription>
-            Manage and view all registered library members.
+            Manage and view all registered library books.
           </CardDescription>
         </CardHeader>
         <CardContent className="flex gap-2">
-          <SearchInput resultsCount={count} />
+          <SearchInput
+            resultsCount={count}
+            placeholder="Search by title, author or bar code..."
+          />
           <BookCreateButton />
         </CardContent>
         <CardFooter>

@@ -20,7 +20,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Prisma } from "@/generated/prisma/client";
-import { MAX_PAGE_TAKE } from "@/lib/consts";
+import { DEFAULT_MAX_PAGE_TAKE } from "@/lib/consts";
 import { db } from "@/lib/db";
 import { safeNumberParse, safeStringParse } from "@/lib/utils";
 import { Album } from "lucide-react";
@@ -61,8 +61,8 @@ export default async function Loans({
     }),
     db.loan.findMany({
       where,
-      take: MAX_PAGE_TAKE,
-      skip: MAX_PAGE_TAKE * (currentPage - 1),
+      take: DEFAULT_MAX_PAGE_TAKE,
+      skip: DEFAULT_MAX_PAGE_TAKE * (currentPage - 1),
       include: {
         book: {
           select: {
@@ -76,10 +76,13 @@ export default async function Loans({
           },
         },
       },
+      orderBy: {
+        end_date: "desc",
+      },
     }),
   ]);
 
-  const maxPage = Math.ceil(count / MAX_PAGE_TAKE);
+  const maxPage = Math.ceil(count / DEFAULT_MAX_PAGE_TAKE);
 
   return (
     <main className="py-4 flex flex-col gap-4">
@@ -91,7 +94,10 @@ export default async function Loans({
           <CardDescription>Manage and view all loans.</CardDescription>
         </CardHeader>
         <CardContent className="flex gap-2">
-          <SearchInput resultsCount={0} />
+          <SearchInput
+            resultsCount={count}
+            placeholder="Search by book's bar code or by member's email..."
+          />
           <LoanCreateButton />
         </CardContent>
         <CardFooter>
@@ -109,8 +115,8 @@ export default async function Loans({
               </TableRow>
             </TableHeader>
             <TableBody>
-              {loans.map((loan, index) => (
-                <TableRow key={index}>
+              {loans.map((loan) => (
+                <TableRow key={loan.id}>
                   <TableCell>{loan.id}</TableCell>
                   <TableCell>{loan.member.email}</TableCell>
                   <TableCell>{loan.book.title}</TableCell>

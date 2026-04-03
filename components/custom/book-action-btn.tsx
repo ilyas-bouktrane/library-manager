@@ -107,10 +107,10 @@ export const BookActionButton = ({ prevBookData }: { prevBookData: Book }) => {
                   </FieldDescription>
                   <form action={updateBookAction}>
                     <input
-                      type="text"
+                      readOnly
+                      type="hidden"
                       name="id"
-                      hidden
-                      defaultValue={prevBookData.id}
+                      value={prevBookData.id}
                     />
                     <FieldGroup>
                       <Field>
@@ -237,10 +237,10 @@ export const BookActionButton = ({ prevBookData }: { prevBookData: Book }) => {
                       Permanently Delete
                     </Button>
                     <input
-                      type="text"
+                      readOnly
+                      type="hidden"
                       name="id"
                       defaultValue={prevBookData.id}
-                      hidden
                     />
                   </form>
                   <Button

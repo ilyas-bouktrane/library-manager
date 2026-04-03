@@ -1,5 +1,5 @@
 import { Outfit } from "next/font/google";
-import { HEADER_HEIGHT, PAGE_WIDTH } from "@/lib/consts";
+import { DEFAULT_HEADER_HEIGHT, DEFAULT_PAGE_WIDTH } from "@/lib/consts";
 import { Header } from "@/components/custom/header";
 import { Footer } from "@/components/custom/footer";
 import { ThemeProvider } from "@/components/theme/theme-provider";
@@ -9,6 +9,8 @@ import { Toaster } from "@/components/ui/sonner";
 import NextTopLoader from "nextjs-toploader";
 
 import "./globals.css";
+import { SettingsProvider } from "@/components/custom/settings-context";
+import { getSettings } from "@/lib/settings";
 
 const outfit = Outfit({ subsets: ["latin"], variable: "--font-outfit" });
 
@@ -18,11 +20,12 @@ export const metadata: Metadata = {
     "A system that helps library managers effectively organize book collections and track member loans using an automated database. It manages book availability, borrower records, and return dates while automating email notifications for overdue items.",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const settings = await getSettings();
   return (
     <html
       lang="en"
@@ -30,7 +33,7 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <body
-        style={{ width: PAGE_WIDTH, paddingTop: HEADER_HEIGHT }}
+        style={{ width: DEFAULT_PAGE_WIDTH, paddingTop: DEFAULT_HEADER_HEIGHT }}
         className="min-h-full flex flex-col"
         suppressHydrationWarning
       >
@@ -42,9 +45,11 @@ export default function RootLayout({
         >
           <NextTopLoader />
           <Toaster />
-          <Header />
-          {children}
-          <Footer />
+          <SettingsProvider value={settings}>
+            <Header />
+            {children}
+            <Footer />
+          </SettingsProvider>
         </ThemeProvider>
       </body>
     </html>

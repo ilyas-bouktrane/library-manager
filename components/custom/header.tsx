@@ -7,7 +7,7 @@ import {
   Users,
 } from "lucide-react";
 import { Button } from "../ui/button";
-import { HEADER_HEIGHT, PAGE_WIDTH } from "@/lib/consts";
+import { DEFAULT_HEADER_HEIGHT, DEFAULT_PAGE_WIDTH } from "@/lib/consts";
 import {
   Popover,
   PopoverContent,
@@ -22,16 +22,16 @@ import { NavLink } from "./nav-link";
 export const Header = () => {
   const pages = [
     { Icon: <LayoutDashboard />, label: "Dashboard", link: "/dashboard" },
+    { Icon: <Album />, label: "Loans", link: "/loans" },
     { Icon: <Book />, label: "Books", link: "/books" },
     { Icon: <Users />, label: "Members", link: "/members" },
-    { Icon: <Album />, label: "Loans", link: "/loans" },
     { Icon: <Settings />, label: "Settings", link: "/settings" },
   ];
 
   return (
     <header className="fixed top-0 left-0 w-full flex justify-center border-b bg-white/5 backdrop-blur-md">
       <div
-        style={{ height: HEADER_HEIGHT, width: PAGE_WIDTH }}
+        style={{ height: DEFAULT_HEADER_HEIGHT, width: DEFAULT_PAGE_WIDTH }}
         className="w-full p-2 flex justify-between"
       >
         <div className="flex gap-1 text-2xl font-bold items-center">
