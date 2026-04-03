@@ -18,8 +18,10 @@ import {
 } from "@/components/ui/popover";
 import { ThemeToggle } from "../theme/theme-toggle";
 import { NavLink } from "./nav-link";
+import { getSettings } from "@/lib/settings";
 
-export const Header = () => {
+export const Header = async () => {
+  const { LIBRARY_NAME } = await getSettings();
   const pages = [
     { Icon: <LayoutDashboard />, label: "Dashboard", link: "/dashboard" },
     { Icon: <Album />, label: "Loans", link: "/loans" },
@@ -35,7 +37,7 @@ export const Header = () => {
         className="w-full p-2 flex justify-between"
       >
         <div className="flex gap-1 text-2xl font-bold items-center">
-          <LibraryBig size={30} /> Library Manager
+          <LibraryBig size={30} /> {LIBRARY_NAME}
         </div>
         <div className="flex items-center gap-3 text-muted-foreground">
           {pages.map((page, index) => (
