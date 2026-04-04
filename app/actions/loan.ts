@@ -1,9 +1,15 @@
 "use server";
 
+import { LoanConfirmationEmail } from "@/components/resend/loan-confirmation-template";
+import { LoanRenewalEmail } from "@/components/resend/renew-confirmation-template";
+import { LoanReturnEmail } from "@/components/resend/return-confirmation-template";
 import { Book, Loan, Member, Prisma } from "@/generated/prisma/client";
 import { db } from "@/lib/db";
 import { getSettings } from "@/lib/settings";
 import { addDays } from "date-fns";
+import { Resend } from "resend";
+
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 type DeleteLoan = {
   timestamp: number;
@@ -35,6 +41,7 @@ export const returnLoan = async (
   _: ReturnLoan,
   formData: FormData,
 ): Promise<ReturnLoan> => {
+  const { LIBRARY_NAME } = await getSettings();
   const id = formData.get("id") as string;
 
   try {
@@ -46,7 +53,21 @@ export const returnLoan = async (
     const result = await db.loan.update({
       where: { id },
       data: { is_returned: !prev?.is_returned },
+      include: {
+        book: true,
+        member: true,
+      },
     });
+
+    const emailConfirmation = await resend.emails.send({
+      from: `${LIBRARY_NAME} <${process.env.RESEND_SENDER_EMAIL || "onboarding@resend.dev"}>`,
+      to: result.member.email,
+      subject: "Return Confirmed - Library Notification",
+      react: LoanReturnEmail({ loan: result, libraryName: LIBRARY_NAME }),
+    });
+
+    if (emailConfirmation.error)
+      throw new Error(emailConfirmation.error.message);
 
     return { timestamp: Date.now(), success: result.id === id };
   } catch {
@@ -62,7 +83,7 @@ export const renewLoan = async (
   _: RenewLoan,
   formData: FormData,
 ): Promise<RenewLoan> => {
-  const { LOAN_DURATION_DAYS } = await getSettings();
+  const { LOAN_DURATION_DAYS, LIBRARY_NAME } = await getSettings();
   const id = formData.get("id") as string;
 
   try {
@@ -76,7 +97,21 @@ export const renewLoan = async (
         },
         end_date: addDays(prev!.end_date!, Number(LOAN_DURATION_DAYS)),
       },
+      include: {
+        book: true,
+        member: true,
+      },
     });
+
+    const emailConfirmation = await resend.emails.send({
+      from: `${LIBRARY_NAME} <${process.env.RESEND_SENDER_EMAIL || "onboarding@resend.dev"}>`,
+      to: result.member.email,
+      subject: "Loan Renewed - Library Notification",
+      react: LoanRenewalEmail({ loan: result, libraryName: LIBRARY_NAME }),
+    });
+
+    if (emailConfirmation.error)
+      throw new Error(emailConfirmation.error.message);
 
     return { timestamp: Date.now(), success: result.id === id };
   } catch {
@@ -156,6 +191,7 @@ export const createLoan = async (
   _: CreateLoan,
   formData: FormData,
 ): Promise<CreateLoan> => {
+  const { LIBRARY_NAME } = await getSettings();
   const {
     bar_code,
     email,
@@ -182,7 +218,21 @@ export const createLoan = async (
         },
         end_date,
       },
+      include: {
+        book: true,
+        member: true,
+      },
     });
+
+    const emailConfirmation = await resend.emails.send({
+      from: `${LIBRARY_NAME} <${process.env.RESEND_SENDER_EMAIL || "onboarding@resend.dev"}>`,
+      to: result.member.email,
+      subject: "Loan Confirmed - Library Notification",
+      react: LoanConfirmationEmail({ loan: result, libraryName: LIBRARY_NAME }),
+    });
+
+    if (emailConfirmation.error)
+      throw new Error(emailConfirmation.error.message);
 
     return {
       timestamp: Date.now(),

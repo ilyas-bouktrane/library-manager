@@ -6,6 +6,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Label } from "@/components/ui/label";
 import { getSettings } from "@/lib/settings";
 
 export default async function Settings() {
@@ -20,10 +21,11 @@ export default async function Settings() {
             Manage the app&apos;s default settings here.
           </CardDescription>
         </CardHeader>
-        <CardFooter className="flex flex-col gap-4">
-          {Object.entries(settings).map(([key, value]) => (
-            <SettingField key={key} label={key} value={value} />
-          ))}
+        <CardFooter className="grid grid-cols-[1fr_5fr] gap-y-4">
+          {Object.entries(settings).flatMap(([key, value]) => [
+            <Label key={`label-${key}`}>{key}</Label>,
+            <SettingField key={`value-${key}`} label={key} value={value} />,
+          ])}
         </CardFooter>
       </Card>
     </main>

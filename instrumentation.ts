@@ -11,7 +11,6 @@ export async function register() {
 
     try {
       console.log("[STARTUP] Populating database with default settings...");
-
       await Promise.all([
         db.setting.upsert({
           where: { key: "LOAN_DURATION_DAYS" },
@@ -38,7 +37,6 @@ export async function register() {
           },
         }),
       ]);
-
       console.log("[STARTUP] Database successfully populated.");
     } catch (error) {
       console.error("[STARTUP] Something went wrong :", error);

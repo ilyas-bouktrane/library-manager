@@ -3,7 +3,6 @@
 import { useActionState, useEffect, useState } from "react";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
-import { Label } from "../ui/label";
 import { updateSetting } from "@/app/actions/setting";
 import { toast } from "sonner";
 import { useRouter } from "nextjs-toploader/app";
@@ -42,7 +41,6 @@ export const SettingField = ({
       action={updateSettingAction}
       className="flex gap-3 items-center w-full"
     >
-      <Label>{label}</Label>
       <input readOnly type="hidden" name="key" value={label} />
       <Input
         name="value"
