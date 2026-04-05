@@ -1,0 +1,20 @@
+# .github/workflows/test.yml
+
+name: Test Build before Publish
+on:
+  push:
+    branches: [dev]
+
+jobs:
+  validate-docker:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build Only
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: false
+          tags: test-build:local
