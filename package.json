@@ -6,7 +6,7 @@
     "dev": "bun --bun next dev",
     "build": "bun --bun next build",
     "start": "bun --bun next start",
-    "deploy": "bunx --bun prisma migrate deploy && bunx --bun prisma generate && bun --bun next start"
+    "deploy": "bunx --bun prisma migrate deploy && bun --bun next start"
   },
   "dependencies": {
     "@prisma/adapter-pg": "^7.5.0",
