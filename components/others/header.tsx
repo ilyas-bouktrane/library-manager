@@ -6,19 +6,11 @@ import {
   Settings,
   Users,
 } from "lucide-react";
-import { Button } from "../ui/button";
 import { DEFAULT_HEADER_HEIGHT, DEFAULT_PAGE_WIDTH } from "@/lib/consts";
-import {
-  Popover,
-  PopoverContent,
-  PopoverDescription,
-  PopoverHeader,
-  PopoverTitle,
-  PopoverTrigger,
-} from "@/components/ui/popover";
 import { ThemeToggle } from "../theme/theme-toggle";
 import { NavLink } from "./nav-link";
 import { getSettings } from "@/lib/settings";
+import { LanguageToggle } from "./lang-toggle";
 
 export const Header = async () => {
   const { LIBRARY_NAME } = await getSettings();
@@ -45,8 +37,9 @@ export const Header = async () => {
           ))}
         </div>
         <div className="flex gap-2 items-center">
+          <LanguageToggle />
           <ThemeToggle />
-          <Popover>
+          {/* <Popover> // FUTURE FEATURE...
             <PopoverTrigger asChild>
               <Button>IB</Button>
             </PopoverTrigger>
@@ -59,7 +52,7 @@ export const Header = async () => {
               </PopoverHeader>
               <Button variant={"destructive"}>Disconnect</Button>
             </PopoverContent>
-          </Popover>
+          </Popover> */}
         </div>
       </div>
     </header>

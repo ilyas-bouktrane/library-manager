@@ -1,5 +1,5 @@
 import { TemporalSumChart } from "@/components/charts/temporal-sum-chart";
-import { MiniCard } from "@/components/custom/mini-card";
+import { MiniCard } from "@/components/others/mini-card";
 import { db } from "@/lib/db";
 import {
   BookCopy,

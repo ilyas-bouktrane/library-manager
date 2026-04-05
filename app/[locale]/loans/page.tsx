@@ -24,12 +24,18 @@ import { DEFAULT_MAX_PAGE_TAKE } from "@/lib/consts";
 import { db } from "@/lib/db";
 import { safeNumberParse, safeStringParse } from "@/lib/utils";
 import { Album } from "lucide-react";
+import { setRequestLocale } from "next-intl/server";
 
 export default async function Loans({
   searchParams,
+  params,
 }: {
   searchParams: Promise<{ q?: string; p?: string }>;
+  params: Promise<{ locale: string }>;
 }) {
+  const { locale } = await params;
+  setRequestLocale(locale);
+
   const { q, p } = await searchParams;
   const currentPage = safeNumberParse(p, 1);
   const searchQuery = safeStringParse(q, "");

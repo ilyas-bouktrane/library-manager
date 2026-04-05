@@ -47,7 +47,7 @@ import {
   returnLoan,
   updateLoan,
 } from "@/app/actions/loan";
-import { DatePicker } from "../custom/date-picker";
+import { DatePicker } from "../others/date-picker";
 
 type LoanData = Pick<Loan, "id" | "end_date" | "is_returned"> &
   Pick<Member, "email"> &

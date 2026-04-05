@@ -8,8 +8,16 @@ import {
 } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { getSettings } from "@/lib/settings";
+import { setRequestLocale } from "next-intl/server";
 
-export default async function Settings() {
+export default async function Settings({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale } = await params;
+  setRequestLocale(locale);
+
   const settings = await getSettings();
 
   return (

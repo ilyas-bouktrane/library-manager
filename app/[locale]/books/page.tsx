@@ -15,46 +15,46 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { db } from "@/lib/db";
-import { MemberActionButton } from "@/components/members/member-action-btn";
-import { MemberCreateButton } from "@/components/members/member-create-btn";
 import { SearchInput } from "@/components/search/search-input";
 import { SearchPagination } from "@/components/search/search-pagination";
 import { DEFAULT_MAX_PAGE_TAKE } from "@/lib/consts";
 import { safeNumberParse, safeStringParse } from "@/lib/utils";
-import { Users } from "lucide-react";
+import { Book } from "lucide-react";
+import { BookActionButton } from "@/components/books/book-action-btn";
+import { BookCreateButton } from "@/components/books/book-create-btn";
 import { Prisma } from "@/generated/prisma/client";
+import { setRequestLocale } from "next-intl/server";
 
-export default async function Members({
+export default async function Books({
   searchParams,
+  params,
 }: {
   searchParams: Promise<{ q?: string; p?: string }>;
+  params: Promise<{ locale: string }>;
 }) {
+  const { locale } = await params;
+  setRequestLocale(locale);
+
   const { q, p } = await searchParams;
   const currentPage = safeNumberParse(p, 1);
   const searchQuery = safeStringParse(q, "");
 
-  const where: Prisma.MemberWhereInput = {
+  const where: Prisma.BookWhereInput = {
     OR: [
       {
-        email: {
+        bar_code: {
           contains: searchQuery,
           mode: "insensitive",
         },
       },
       {
-        first_name: {
+        title: {
           contains: searchQuery,
           mode: "insensitive",
         },
       },
       {
-        last_name: {
-          contains: searchQuery,
-          mode: "insensitive",
-        },
-      },
-      {
-        phone_number: {
+        author: {
           contains: searchQuery,
           mode: "insensitive",
         },
@@ -62,9 +62,11 @@ export default async function Members({
     ],
   };
 
-  const [count, members] = await Promise.all([
-    db.member.count({ where }),
-    db.member.findMany({
+  const [count, books] = await Promise.all([
+    db.book.count({
+      where,
+    }),
+    db.book.findMany({
       where,
       take: DEFAULT_MAX_PAGE_TAKE,
       skip: DEFAULT_MAX_PAGE_TAKE * (currentPage - 1),
@@ -78,45 +80,41 @@ export default async function Members({
       <Card>
         <CardHeader>
           <CardTitle className="flex gap-1 items-center">
-            <Users size={18} /> Members
+            <Book size={18} /> Books
           </CardTitle>
           <CardDescription>
-            Manage and view all registered library members.
+            Manage and view all registered library books.
           </CardDescription>
         </CardHeader>
         <CardContent className="flex gap-2">
           <SearchInput
             resultsCount={count}
-            placeholder="Search by name, email or phone number..."
+            placeholder="Search by title, author or bar code..."
           />
-          <MemberCreateButton />
+          <BookCreateButton />
         </CardContent>
         <CardFooter>
           <Table>
             <TableHeader>
               <TableRow>
                 <TableHead>ID</TableHead>
-                <TableHead>First Name</TableHead>
-                <TableHead>Last Name</TableHead>
-                <TableHead>Email</TableHead>
-                <TableHead>Phone Number</TableHead>
-                <TableHead>Member Since</TableHead>
+                <TableHead>Bar Code</TableHead>
+                <TableHead>Title</TableHead>
+                <TableHead>Author</TableHead>
+                <TableHead>Quantity</TableHead>
                 <TableHead className="text-right">Action</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
-              {members.map((member, index) => (
+              {books.map((book, index) => (
                 <TableRow key={index}>
-                  <TableCell>{member.id}</TableCell>
-                  <TableCell>{member.first_name}</TableCell>
-                  <TableCell>{member.last_name}</TableCell>
-                  <TableCell>{member.email}</TableCell>
-                  <TableCell>{member.phone_number}</TableCell>
-                  <TableCell>
-                    {member.created_at.toLocaleDateString()}
-                  </TableCell>
+                  <TableCell>{book.id}</TableCell>
+                  <TableCell>{book.bar_code}</TableCell>
+                  <TableCell>{book.title}</TableCell>
+                  <TableCell>{book.author}</TableCell>
+                  <TableCell>{book.quantity}</TableCell>
                   <TableCell className="text-right">
-                    <MemberActionButton prevMemberData={member} />
+                    <BookActionButton prevBookData={book} />
                   </TableCell>
                 </TableRow>
               ))}

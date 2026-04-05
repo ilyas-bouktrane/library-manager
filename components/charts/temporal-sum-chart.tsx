@@ -220,15 +220,15 @@ export function TemporalSumChart({
   // eslint-disable-next-line react-hooks/set-state-in-effect
   useEffect(() => setMounted(true), []);
 
-  const valueKeys = useMemo(
-    () =>
-      !data.length
-        ? []
-        : Object.keys(data[0]).filter(
-            (k) => k !== "date" && typeof data[0][k] === "number",
-          ),
-    [data],
-  );
+  const valueKeys = useMemo(() => {
+    const keys = new Set<string>();
+    for (const row of data) {
+      for (const k of Object.keys(row)) {
+        if (k !== "date" && typeof row[k] === "number") keys.add(k);
+      }
+    }
+    return Array.from(keys);
+  }, [data]);
 
   const grouped = useMemo(() => {
     const start = new Date();
