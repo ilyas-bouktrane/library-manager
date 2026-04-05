@@ -20,8 +20,8 @@ import { SearchPagination } from "@/components/search/search-pagination";
 import { DEFAULT_MAX_PAGE_TAKE } from "@/lib/consts";
 import { safeNumberParse, safeStringParse } from "@/lib/utils";
 import { Book } from "lucide-react";
-import { BookActionButton } from "@/components/custom/book-action-btn";
-import { BookCreateButton } from "@/components/custom/book-create-btn";
+import { BookActionButton } from "@/components/books/book-action-btn";
+import { BookCreateButton } from "@/components/books/book-create-btn";
 import { Prisma } from "@/generated/prisma/client";
 
 export default async function Books({

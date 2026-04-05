@@ -1,5 +1,5 @@
-import { LoanActionButton } from "@/components/custom/loan-action-btn";
-import { LoanCreateButton } from "@/components/custom/loan-create-btn";
+import { LoanActionButton } from "@/components/loans/loan-action-btn";
+import { LoanCreateButton } from "@/components/loans/loan-create-btn";
 import { SearchInput } from "@/components/search/search-input";
 import { SearchPagination } from "@/components/search/search-pagination";
 import { Badge } from "@/components/ui/badge";

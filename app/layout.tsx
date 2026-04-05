@@ -9,7 +9,7 @@ import { Toaster } from "@/components/ui/sonner";
 import NextTopLoader from "nextjs-toploader";
 
 import "./globals.css";
-import { SettingsProvider } from "@/components/custom/settings-context";
+import { SettingsProvider } from "@/components/settings/settings-context";
 import { getSettings } from "@/lib/settings";
 
 const outfit = Outfit({ subsets: ["latin"], variable: "--font-outfit" });

@@ -1,4 +1,4 @@
-import { SettingField } from "@/components/custom/setting-field";
+import { SettingField } from "@/components/settings/setting-field";
 import {
   Card,
   CardDescription,

@@ -52,7 +52,7 @@ export const returnLoan = async (
     });
     const result = await db.loan.update({
       where: { id },
-      data: { is_returned: !prev?.is_returned },
+      data: { is_returned: !prev?.is_returned, return_date: new Date() },
       include: {
         book: true,
         member: true,

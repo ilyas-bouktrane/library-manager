@@ -15,8 +15,8 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { db } from "@/lib/db";
-import { MemberActionButton } from "@/components/custom/member-action-btn";
-import { MemberCreateButton } from "@/components/custom/member-create-btn";
+import { MemberActionButton } from "@/components/members/member-action-btn";
+import { MemberCreateButton } from "@/components/members/member-create-btn";
 import { SearchInput } from "@/components/search/search-input";
 import { SearchPagination } from "@/components/search/search-pagination";
 import { DEFAULT_MAX_PAGE_TAKE } from "@/lib/consts";

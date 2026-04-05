@@ -25,8 +25,8 @@ import { Book, Loan, Member } from "@/generated/prisma/client";
 import { useRouter } from "nextjs-toploader/app";
 import { toast } from "sonner";
 import { createLoan } from "@/app/actions/loan";
-import { DatePicker } from "./date-picker";
-import { useSettings } from "./settings-context";
+import { DatePicker } from "../custom/date-picker";
+import { useSettings } from "../settings/settings-context";
 import { addDays } from "date-fns";
 
 export const LoanCreateButton = () => {
