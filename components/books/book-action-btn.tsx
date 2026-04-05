@@ -35,8 +35,13 @@ import { Input } from "../ui/input";
 import { Book } from "@/generated/prisma/client";
 import { isEqual } from "lodash";
 import { deleteBook, updateBook } from "@/app/actions/book";
+import { useTranslations } from "next-intl";
 
 export const BookActionButton = ({ prevBookData }: { prevBookData: Book }) => {
+  const t = useTranslations("Books");
+  const tActions = useTranslations("Actions");
+  const tTable = useTranslations("Books.table");
+
   const router = useRouter();
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [showEditDialog, setShowEditDialog] = useState(false);
@@ -55,10 +60,10 @@ export const BookActionButton = ({ prevBookData }: { prevBookData: Book }) => {
   useEffect(() => {
     if (deleteBookState.success) {
       router.refresh();
-      toast.success("Book deleted permanently.", { position: "top-center" });
+      toast.success(t("delete.success"), { position: "top-center" });
       setShowDeleteDialog(false);
     } else if (!deleteBookState.success && deleteBookState.timestamp) {
-      toast.error("Could not delete the book.", { position: "top-center" });
+      toast.error(t("delete.error"), { position: "top-center" });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [deleteBookState.timestamp]);
@@ -66,10 +71,10 @@ export const BookActionButton = ({ prevBookData }: { prevBookData: Book }) => {
   useEffect(() => {
     if (updateBookState.success) {
       router.refresh();
-      toast.success("Book updated successfully.", { position: "top-center" });
+      toast.success(t("edit.success"), { position: "top-center" });
       setShowEditDialog(false);
     } else if (!updateBookState.success && updateBookState.timestamp) {
-      toast.error("Could not update the book.", { position: "top-center" });
+      toast.error(t("edit.error"), { position: "top-center" });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [updateBookState.timestamp]);
@@ -83,7 +88,7 @@ export const BookActionButton = ({ prevBookData }: { prevBookData: Book }) => {
       </DropdownMenuTrigger>
       <DropdownMenuContent>
         <DropdownMenuGroup>
-          <DropdownMenuLabel>Action</DropdownMenuLabel>
+          <DropdownMenuLabel>{tActions("action")}</DropdownMenuLabel>
           <Dialog open={showEditDialog} onOpenChange={setShowEditDialog}>
             <DialogTrigger asChild>
               <DropdownMenuItem
@@ -93,7 +98,7 @@ export const BookActionButton = ({ prevBookData }: { prevBookData: Book }) => {
                 }}
               >
                 <SquarePen />
-                Edit
+                {tActions("edit")}
               </DropdownMenuItem>
             </DialogTrigger>
             <DialogContent>
@@ -101,9 +106,9 @@ export const BookActionButton = ({ prevBookData }: { prevBookData: Book }) => {
                 <DialogTitle hidden />
                 <DialogDescription hidden />
                 <FieldSet>
-                  <FieldLegend>Edit Book</FieldLegend>
+                  <FieldLegend>{t("edit.title")}</FieldLegend>
                   <FieldDescription>
-                    The bar code must be unique.
+                    {t("edit.description")}
                   </FieldDescription>
                   <form action={updateBookAction}>
                     <input
@@ -114,14 +119,14 @@ export const BookActionButton = ({ prevBookData }: { prevBookData: Book }) => {
                     />
                     <FieldGroup>
                       <Field>
-                        <FieldLabel htmlFor="bar_code">Bar Code</FieldLabel>
+                        <FieldLabel htmlFor="bar_code">{tTable("barCode")}</FieldLabel>
                         <Input
                           id="bar_code"
                           type="bar_code"
                           name="bar_code"
                           autoComplete="off"
                           aria-invalid={updateBookState.barCodeTaken}
-                          placeholder="Bar Code"
+                          placeholder={tTable("barCode")}
                           value={bookData.bar_code}
                           onChange={(e) =>
                             setBookData((prev) => ({
@@ -132,15 +137,15 @@ export const BookActionButton = ({ prevBookData }: { prevBookData: Book }) => {
                         />
                         {updateBookState.barCodeTaken && (
                           <FieldError>
-                            This bar code is already taken.
+                            {t("create.barCodeTaken")}
                           </FieldError>
                         )}
-                        <FieldLabel htmlFor="title">Title</FieldLabel>
+                        <FieldLabel htmlFor="title">{tTable("title")}</FieldLabel>
                         <Input
                           id="title"
                           name="title"
                           autoComplete="off"
-                          placeholder="Title"
+                          placeholder={tTable("title")}
                           value={bookData.title}
                           onChange={(e) =>
                             setBookData((prev) => ({
@@ -149,12 +154,12 @@ export const BookActionButton = ({ prevBookData }: { prevBookData: Book }) => {
                             }))
                           }
                         />
-                        <FieldLabel htmlFor="author">Author</FieldLabel>
+                        <FieldLabel htmlFor="author">{tTable("author")}</FieldLabel>
                         <Input
                           id="author"
                           name="author"
                           autoComplete="off"
-                          placeholder="Author"
+                          placeholder={tTable("author")}
                           value={bookData.author ?? undefined}
                           onChange={(e) =>
                             setBookData((prev) => ({
@@ -163,7 +168,7 @@ export const BookActionButton = ({ prevBookData }: { prevBookData: Book }) => {
                             }))
                           }
                         />
-                        <FieldLabel htmlFor="phone_number">Quantity</FieldLabel>
+                        <FieldLabel htmlFor="phone_number">{tTable("quantity")}</FieldLabel>
                         <Input
                           type="number"
                           id="quantity"
@@ -188,7 +193,7 @@ export const BookActionButton = ({ prevBookData }: { prevBookData: Book }) => {
                           }
                           className="flex-1"
                         >
-                          Apply
+                          {tActions("apply")}
                         </Button>
                         <Button
                           type="button"
@@ -196,7 +201,7 @@ export const BookActionButton = ({ prevBookData }: { prevBookData: Book }) => {
                           onClick={() => setShowEditDialog(false)}
                           variant={"secondary"}
                         >
-                          Cancel
+                          {tActions("cancel")}
                         </Button>
                       </Field>
                     </FieldGroup>
@@ -216,15 +221,14 @@ export const BookActionButton = ({ prevBookData }: { prevBookData: Book }) => {
                 }}
               >
                 <Trash />
-                Delete
+                {tActions("delete")}
               </DropdownMenuItem>
             </DialogTrigger>
             <DialogContent>
               <DialogHeader>
-                <DialogTitle>Are you absolutely sure?</DialogTitle>
+                <DialogTitle>{tActions("areYouSure")}</DialogTitle>
                 <DialogDescription>
-                  This action cannot be undone. This will permanently delete the
-                  book and remove its data from our servers.
+                  {tActions("cannotBeUndone")}
                 </DialogDescription>
                 <div className="flex gap-2 w-full">
                   <form action={deleteBookAction} className="flex-1">
@@ -234,7 +238,7 @@ export const BookActionButton = ({ prevBookData }: { prevBookData: Book }) => {
                       variant={"destructive"}
                       disabled={deleteBookIsPending}
                     >
-                      Permanently Delete
+                      {tActions("permanentlyDelete")}
                     </Button>
                     <input
                       readOnly
@@ -248,7 +252,7 @@ export const BookActionButton = ({ prevBookData }: { prevBookData: Book }) => {
                     className="flex-1"
                     variant={"secondary"}
                   >
-                    Cancel
+                    {tActions("cancel")}
                   </Button>
                 </div>
               </DialogHeader>

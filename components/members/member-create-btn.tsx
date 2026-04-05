@@ -25,8 +25,13 @@ import { Input } from "../ui/input";
 import { Member } from "@/generated/prisma/client";
 import { useRouter } from "nextjs-toploader/app";
 import { toast } from "sonner";
+import { useTranslations } from "next-intl";
 
 export const MemberCreateButton = () => {
+  const t = useTranslations("Members.create");
+  const tActions = useTranslations("Actions");
+  const tTable = useTranslations("Members.table");
+
   const router = useRouter();
   const [showCreateDialog, setShowCreateDialog] = useState(false);
   const [inputMemberData, setInputMemberData] = useState<
@@ -47,7 +52,7 @@ export const MemberCreateButton = () => {
   useEffect(() => {
     if (createMemberState.success) {
       router.refresh();
-      toast.success("Member created successfully.", { position: "top-center" });
+      toast.success(t("success"), { position: "top-center" });
       setShowCreateDialog(false);
       setInputMemberData({
         first_name: "",
@@ -56,7 +61,7 @@ export const MemberCreateButton = () => {
         phone_number: "",
       });
     } else if (!createMemberState.success && createMemberState.timestamp) {
-      toast.success("Failed to create member.", { position: "top-center" });
+      toast.error(t("error"), { position: "top-center" });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [createMemberState.timestamp]);
@@ -65,7 +70,7 @@ export const MemberCreateButton = () => {
     <Dialog open={showCreateDialog} onOpenChange={setShowCreateDialog}>
       <DialogTrigger>
         <Button variant={"outline"}>
-          <Plus /> Create
+          <Plus /> {tActions("add")}
         </Button>
       </DialogTrigger>
       <DialogContent>
@@ -73,19 +78,19 @@ export const MemberCreateButton = () => {
           <DialogTitle hidden />
           <DialogDescription hidden />
           <FieldSet>
-            <FieldLegend>Create Member</FieldLegend>
+            <FieldLegend>{t("title")}</FieldLegend>
             <FieldDescription>
-              You must enter an unique email that has not been chosen.
+              {t("description")}
             </FieldDescription>
             <form action={createMemberAction}>
               <FieldGroup>
                 <Field>
-                  <FieldLabel htmlFor="first_name">First Name</FieldLabel>
+                  <FieldLabel htmlFor="first_name">{tTable("firstName")}</FieldLabel>
                   <Input
                     id="first_name"
                     name="first_name"
                     autoComplete="off"
-                    placeholder="First Name"
+                    placeholder={tTable("firstName")}
                     value={inputMemberData.first_name}
                     onChange={(e) =>
                       setInputMemberData((prev) => ({
@@ -94,12 +99,12 @@ export const MemberCreateButton = () => {
                       }))
                     }
                   />
-                  <FieldLabel htmlFor="last_name">Last Name</FieldLabel>
+                  <FieldLabel htmlFor="last_name">{tTable("lastName")}</FieldLabel>
                   <Input
                     id="last_name"
                     name="last_name"
                     autoComplete="off"
-                    placeholder="Last Name"
+                    placeholder={tTable("lastName")}
                     value={inputMemberData.last_name}
                     onChange={(e) =>
                       setInputMemberData((prev) => ({
@@ -108,7 +113,7 @@ export const MemberCreateButton = () => {
                       }))
                     }
                   />
-                  <FieldLabel htmlFor="email">Email</FieldLabel>
+                  <FieldLabel htmlFor="email">{tTable("email")}</FieldLabel>
                   <Input
                     id="email"
                     type="email"
@@ -126,10 +131,10 @@ export const MemberCreateButton = () => {
                   />
                   {createMemberState.emailTaken && (
                     <FieldError>
-                      This email is already taken. Please chose another one.
+                      {t("emailTaken")}
                     </FieldError>
                   )}
-                  <FieldLabel htmlFor="phone_number">Phone</FieldLabel>
+                  <FieldLabel htmlFor="phone_number">{tTable("phoneNumber")}</FieldLabel>
                   <Input
                     id="phone_number"
                     name="phone_number"
@@ -155,7 +160,7 @@ export const MemberCreateButton = () => {
                     }
                     className="flex-1"
                   >
-                    Create
+                    {tActions("create")}
                   </Button>
                   <Button
                     type="button"
@@ -163,7 +168,7 @@ export const MemberCreateButton = () => {
                     onClick={() => setShowCreateDialog(false)}
                     variant={"secondary"}
                   >
-                    Cancel
+                    {tActions("cancel")}
                   </Button>
                 </Field>
               </FieldGroup>

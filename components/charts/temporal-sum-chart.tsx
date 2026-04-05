@@ -23,6 +23,7 @@ import {
   Eye,
   EyeOff,
 } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -57,12 +58,6 @@ const RANGE_MONTHS: Record<Range, number> = {
   "3m": 3,
   "6m": 6,
   "12m": 12,
-};
-
-const GROUP_META: Record<GroupBy, { label: string; icon: React.ReactNode }> = {
-  day: { label: "Day", icon: <CalendarDays size={12} /> },
-  week: { label: "Week", icon: <CalendarRange size={12} /> },
-  month: { label: "Month", icon: <Calendar size={12} /> },
 };
 
 // ─── Date Utilities ───────────────────────────────────────────────────────────
@@ -103,19 +98,19 @@ function toGroupKey(d: Date, g: GroupBy): string {
   return d.toISOString().split("T")[0];
 }
 
-function formatLabel(key: string, g: GroupBy): string {
+function formatLabel(key: string, g: GroupBy, locale: string): string {
   if (g === "week") {
     const [year, week] = key.split("-W");
     return `W${week} '${year.slice(2)}`;
   }
   if (g === "month") {
     const [year, month] = key.split("-");
-    return new Intl.DateTimeFormat("en", {
+    return new Intl.DateTimeFormat(locale, {
       month: "short",
       year: "2-digit",
     }).format(new Date(+year, +month - 1, 1));
   }
-  return new Intl.DateTimeFormat("en", {
+  return new Intl.DateTimeFormat(locale, {
     month: "short",
     day: "numeric",
   }).format(new Date(key));
@@ -212,13 +207,21 @@ export function TemporalSumChart({
   defaultGroupBy = "week",
   defaultChartType = "area",
 }: InteractiveChartProps) {
+  const t = useTranslations("Chart");
   const [range, setRange] = useState<Range>(defaultRange);
   const [groupBy, setGroupBy] = useState<GroupBy>(defaultGroupBy);
   const [chartType, setChartType] = useState<ChartType>(defaultChartType);
   const [hidden, setHidden] = useState<Set<string>>(new Set());
   const [mounted, setMounted] = useState(false);
+  
   // eslint-disable-next-line react-hooks/set-state-in-effect
   useEffect(() => setMounted(true), []);
+
+  const GROUP_META: Record<GroupBy, { label: string; icon: React.ReactNode }> = {
+    day: { label: t("day"), icon: <CalendarDays size={12} /> },
+    week: { label: t("week"), icon: <CalendarRange size={12} /> },
+    month: { label: t("month"), icon: <Calendar size={12} /> },
+  };
 
   const valueKeys = useMemo(() => {
     const keys = new Set<string>();
@@ -253,7 +256,7 @@ export function TemporalSumChart({
     return Array.from(map.entries())
       .sort(([a], [b]) => a.localeCompare(b))
       .map(([key, sums]) => ({
-        _label: formatLabel(key, groupBy),
+        _label: formatLabel(key, groupBy, "en"), // TODO: Pass locale
         ...Object.fromEntries(
           valueKeys.map((k) => [
             k,
@@ -333,14 +336,14 @@ export function TemporalSumChart({
               className={btnClass(chartType === "area")}
             >
               <AreaIcon size={12} />
-              Area
+              {t("area")}
             </button>
             <button
               onClick={() => setChartType("bar")}
               className={btnClass(chartType === "bar")}
             >
               <BarChart2 size={12} />
-              Bar
+              {t("bar")}
             </button>
           </div>
         </div>
@@ -370,7 +373,7 @@ export function TemporalSumChart({
         {!mounted ? null : grouped.length === 0 ? (
           <div className="flex flex-col items-center justify-center h-full text-muted-foreground text-sm gap-2">
             <DatabaseZap size={24} className="opacity-40" />
-            No data for this period.
+            {t("noData")}
           </div>
         ) : (
           <ResponsiveContainer width="100%" height="100%">
@@ -461,7 +464,7 @@ export function TemporalSumChart({
       {/* Footer */}
       <p className="text-xs text-muted-foreground flex items-center gap-1.5">
         <DatabaseZap size={11} />
-        {grouped.length} points · sum by {groupBy} · {data.length} raw entries
+        {grouped.length} {t("points")} · {t("sumBy")} {groupBy} · {data.length} {t("rawEntries")}
       </p>
     </div>
   );

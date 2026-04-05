@@ -10,6 +10,7 @@ import { Search } from "lucide-react";
 import { useRouter } from "nextjs-toploader/app";
 import { useEffect, useState } from "react";
 import { usePathname, useSearchParams } from "next/navigation";
+import { useTranslations } from "next-intl";
 
 export const SearchInput = ({
   resultsCount,
@@ -18,6 +19,7 @@ export const SearchInput = ({
   resultsCount: number;
   placeholder: string;
 }) => {
+  const t = useTranslations("Actions");
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const router = useRouter();
@@ -58,18 +60,18 @@ export const SearchInput = ({
           <Search />
         </InputGroupAddon>
         <InputGroupAddon align="inline-end">
-          {resultsCount} result{resultsCount !== 1 && "s"}
+          {resultsCount} {resultsCount === 1 ? t("result") : t("results")}
         </InputGroupAddon>
       </InputGroup>
       <Button disabled={searchIsPending} onClick={() => handleSearch()}>
-        Search
+        {t("search")}
       </Button>
       <Button
         disabled={searchIsPending}
         onClick={() => handleReset()}
         variant={"secondary"}
       >
-        Reset
+        {t("reset")}
       </Button>
     </>
   );

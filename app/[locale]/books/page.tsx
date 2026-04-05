@@ -23,7 +23,7 @@ import { Book } from "lucide-react";
 import { BookActionButton } from "@/components/books/book-action-btn";
 import { BookCreateButton } from "@/components/books/book-create-btn";
 import { Prisma } from "@/generated/prisma/client";
-import { setRequestLocale } from "next-intl/server";
+import { setRequestLocale, getTranslations } from "next-intl/server";
 
 export default async function Books({
   searchParams,
@@ -34,6 +34,7 @@ export default async function Books({
 }) {
   const { locale } = await params;
   setRequestLocale(locale);
+  const t = await getTranslations("Books");
 
   const { q, p } = await searchParams;
   const currentPage = safeNumberParse(p, 1);
@@ -80,16 +81,14 @@ export default async function Books({
       <Card>
         <CardHeader>
           <CardTitle className="flex gap-1 items-center">
-            <Book size={18} /> Books
+            <Book size={18} /> {t("title")}
           </CardTitle>
-          <CardDescription>
-            Manage and view all registered library books.
-          </CardDescription>
+          <CardDescription>{t("description")}</CardDescription>
         </CardHeader>
         <CardContent className="flex gap-2">
           <SearchInput
             resultsCount={count}
-            placeholder="Search by title, author or bar code..."
+            placeholder={t("searchPlaceholder")}
           />
           <BookCreateButton />
         </CardContent>
@@ -97,12 +96,14 @@ export default async function Books({
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>ID</TableHead>
-                <TableHead>Bar Code</TableHead>
-                <TableHead>Title</TableHead>
-                <TableHead>Author</TableHead>
-                <TableHead>Quantity</TableHead>
-                <TableHead className="text-right">Action</TableHead>
+                <TableHead>{t("table.id")}</TableHead>
+                <TableHead>{t("table.barCode")}</TableHead>
+                <TableHead>{t("table.title")}</TableHead>
+                <TableHead>{t("table.author")}</TableHead>
+                <TableHead>{t("table.quantity")}</TableHead>
+                <TableHead className="text-right">
+                  {t("table.action")}
+                </TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>

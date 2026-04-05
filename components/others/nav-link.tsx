@@ -2,8 +2,7 @@
 
 import Link from "next/link";
 import { Button } from "../ui/button";
-import { usePathname } from "next/navigation";
-
+import { usePathname } from "@/i18n/navigation";
 export const NavLink = ({
   page,
 }: {

@@ -7,10 +7,13 @@ import {
   MessageCircleWarning,
   UserRound,
 } from "lucide-react";
+import { getTranslations } from "next-intl/server";
 
 export const dynamic = "force-dynamic";
 
 export default async function Dashboard() {
+  const t = await getTranslations("Dashboard");
+
   const [loans, members, booksCount, activeLoansCount, lateLoansCount] =
     await Promise.all([
       db.loan.findMany({
@@ -66,24 +69,24 @@ export default async function Dashboard() {
     <main className="py-4 flex flex-col gap-4">
       <div className="flex gap-4">
         <MiniCard
-          label="Registered Books"
+          label={t("cards.registeredBooks")}
           value={String(booksCount)}
           Icon={BookCopy}
         />
         <MiniCard
-          label="Registered Members"
+          label={t("cards.registeredMembers")}
           value={String(members.length)}
           Icon={UserRound}
         />
         <MiniCard
-          label="Active Loans"
+          label={t("cards.activeLoans")}
           value={
             <span className={"text-green-500"}>{String(activeLoansCount)}</span>
           }
           Icon={Bookmark}
         />
         <MiniCard
-          label="Unreturned Overdue Loans"
+          label={t("cards.overdueLoans")}
           value={
             <span className={lateLoansCount ? "text-red-500" : ""}>
               {String(lateLoansCount)}
@@ -93,9 +96,12 @@ export default async function Dashboard() {
         />
       </div>
       <TemporalSumChart
-        title="Past Loans and Returns over Time"
-        description="Double bar and line chart"
-        labels={{ loans: "Due and Overdue Loans", returns: "Returned Loans" }}
+        title={t("charts.loansTitle")}
+        description={t("charts.loansDescription")}
+        labels={{
+          loans: t("charts.loansLabel"),
+          returns: t("charts.returnsLabel"),
+        }}
         defaultChartType="area"
         defaultGroupBy="day"
         defaultRange="1m"
@@ -105,9 +111,9 @@ export default async function Dashboard() {
         }))}
       />
       <TemporalSumChart
-        title="New Members over Time"
-        description="Double bar and line chart"
-        labels={{ value: "New Members" }}
+        title={t("charts.membersTitle")}
+        description={t("charts.membersDescription")}
+        labels={{ value: t("charts.membersLabel") }}
         defaultChartType="area"
         defaultGroupBy="day"
         defaultRange="1m"

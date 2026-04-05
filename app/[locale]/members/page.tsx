@@ -23,7 +23,7 @@ import { DEFAULT_MAX_PAGE_TAKE } from "@/lib/consts";
 import { safeNumberParse, safeStringParse } from "@/lib/utils";
 import { Users } from "lucide-react";
 import { Prisma } from "@/generated/prisma/client";
-import { setRequestLocale } from "next-intl/server";
+import { setRequestLocale, getTranslations } from "next-intl/server";
 
 export default async function Members({
   searchParams,
@@ -34,6 +34,7 @@ export default async function Members({
 }) {
   const { locale } = await params;
   setRequestLocale(locale);
+  const t = await getTranslations("Members");
 
   const { q, p } = await searchParams;
   const currentPage = safeNumberParse(p, 1);
@@ -84,16 +85,14 @@ export default async function Members({
       <Card>
         <CardHeader>
           <CardTitle className="flex gap-1 items-center">
-            <Users size={18} /> Members
+            <Users size={18} /> {t("title")}
           </CardTitle>
-          <CardDescription>
-            Manage and view all registered library members.
-          </CardDescription>
+          <CardDescription>{t("description")}</CardDescription>
         </CardHeader>
         <CardContent className="flex gap-2">
           <SearchInput
             resultsCount={count}
-            placeholder="Search by name, email or phone number..."
+            placeholder={t("searchPlaceholder")}
           />
           <MemberCreateButton />
         </CardContent>
@@ -101,13 +100,15 @@ export default async function Members({
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>ID</TableHead>
-                <TableHead>First Name</TableHead>
-                <TableHead>Last Name</TableHead>
-                <TableHead>Email</TableHead>
-                <TableHead>Phone Number</TableHead>
-                <TableHead>Member Since</TableHead>
-                <TableHead className="text-right">Action</TableHead>
+                <TableHead>{t("table.id")}</TableHead>
+                <TableHead>{t("table.firstName")}</TableHead>
+                <TableHead>{t("table.lastName")}</TableHead>
+                <TableHead>{t("table.email")}</TableHead>
+                <TableHead>{t("table.phoneNumber")}</TableHead>
+                <TableHead>{t("table.memberSince")}</TableHead>
+                <TableHead className="text-right">
+                  {t("table.action")}
+                </TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>

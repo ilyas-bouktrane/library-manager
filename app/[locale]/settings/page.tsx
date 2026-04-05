@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { getSettings } from "@/lib/settings";
-import { setRequestLocale } from "next-intl/server";
+import { setRequestLocale, getTranslations } from "next-intl/server";
 
 export default async function Settings({
   params,
@@ -17,6 +17,7 @@ export default async function Settings({
 }) {
   const { locale } = await params;
   setRequestLocale(locale);
+  const t = await getTranslations("Settings");
 
   const settings = await getSettings();
 
@@ -24,10 +25,8 @@ export default async function Settings({
     <main className="py-4">
       <Card>
         <CardHeader>
-          <CardTitle>Settings</CardTitle>
-          <CardDescription>
-            Manage the app&apos;s default settings here.
-          </CardDescription>
+          <CardTitle>{t("title")}</CardTitle>
+          <CardDescription>{t("description")}</CardDescription>
         </CardHeader>
         <CardFooter className="grid grid-cols-[1fr_5fr] gap-y-4">
           {Object.entries(settings).flatMap(([key, value]) => [

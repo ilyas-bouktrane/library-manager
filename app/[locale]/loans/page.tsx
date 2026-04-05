@@ -24,7 +24,7 @@ import { DEFAULT_MAX_PAGE_TAKE } from "@/lib/consts";
 import { db } from "@/lib/db";
 import { safeNumberParse, safeStringParse } from "@/lib/utils";
 import { Album } from "lucide-react";
-import { setRequestLocale } from "next-intl/server";
+import { setRequestLocale, getTranslations } from "next-intl/server";
 
 export default async function Loans({
   searchParams,
@@ -35,6 +35,7 @@ export default async function Loans({
 }) {
   const { locale } = await params;
   setRequestLocale(locale);
+  const t = await getTranslations("Loans");
 
   const { q, p } = await searchParams;
   const currentPage = safeNumberParse(p, 1);
@@ -95,14 +96,14 @@ export default async function Loans({
       <Card>
         <CardHeader>
           <CardTitle className="flex gap-1 items-center">
-            <Album size={18} /> Loans
+            <Album size={18} /> {t("title")}
           </CardTitle>
-          <CardDescription>Manage and view all loans.</CardDescription>
+          <CardDescription>{t("description")}</CardDescription>
         </CardHeader>
         <CardContent className="flex gap-2">
           <SearchInput
             resultsCount={count}
-            placeholder="Search by book's bar code or by member's email..."
+            placeholder={t("searchPlaceholder")}
           />
           <LoanCreateButton />
         </CardContent>
@@ -110,14 +111,20 @@ export default async function Loans({
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>ID</TableHead>
-                <TableHead>Member Email</TableHead>
-                <TableHead>Book Title</TableHead>
-                <TableHead>Start Date</TableHead>
-                <TableHead>End Date</TableHead>
-                <TableHead>Return State</TableHead>
-                <TableHead className="text-center">Renewal Count</TableHead>
-                <TableHead className="text-right">Action</TableHead>
+                <TableHead>{t("table.id")}</TableHead>
+                <TableHead>{t("table.memberEmail")}</TableHead>
+                <TableHead>{t("table.bookTitle")}</TableHead>
+                <TableHead>{t("table.startDate")}</TableHead>
+                <TableHead>{t("table.endDate")}</TableHead>
+                <TableHead className="text-center">
+                  {t("table.returnState")}
+                </TableHead>
+                <TableHead className="text-center">
+                  {t("table.renewalCount")}
+                </TableHead>
+                <TableHead className="text-right">
+                  {t("table.action")}
+                </TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -134,9 +141,9 @@ export default async function Loans({
                   >
                     {loan.end_date.toLocaleDateString()}
                   </TableCell>
-                  <TableCell>
+                  <TableCell className="text-center">
                     {loan.is_returned ? (
-                      <Badge>Returned</Badge>
+                      <Badge>{t("status.returned")}</Badge>
                     ) : (
                       <Badge
                         variant={
@@ -145,7 +152,7 @@ export default async function Loans({
                             : "secondary"
                         }
                       >
-                        Unreturned
+                        {t("status.unreturned")}
                       </Badge>
                     )}
                   </TableCell>

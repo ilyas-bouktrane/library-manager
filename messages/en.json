@@ -1,1 +1,178 @@
-{}
+{
+  "Metadata": {
+    "title": "Library Manager",
+    "description": "A system that helps library managers effectively organize book collections and track member loans using an automated database. It manages book availability, borrower records, and return dates while automating email notifications for overdue items."
+  },
+  "Navigation": {
+    "dashboard": "Dashboard",
+    "loans": "Loans",
+    "books": "Books",
+    "members": "Members",
+    "settings": "Settings"
+  },
+  "Actions": {
+    "search": "Search",
+    "reset": "Reset",
+    "add": "Add",
+    "create": "Create",
+    "cancel": "Cancel",
+    "edit": "Edit",
+    "delete": "Delete",
+    "apply": "Apply",
+    "update": "Update",
+    "permanentlyDelete": "Permanently Delete",
+    "areYouSure": "Are you absolutely sure?",
+    "cannotBeUndone": "This action cannot be undone. This will permanently delete the item and remove its data from our servers.",
+    "close": "Close",
+    "action": "Action",
+    "results": "results",
+    "result": "result"
+  },
+  "Books": {
+    "title": "Books",
+    "description": "Manage and view all registered library books.",
+    "searchPlaceholder": "Search by title, author or bar code...",
+    "table": {
+      "id": "ID",
+      "barCode": "Bar Code",
+      "title": "Title",
+      "author": "Author",
+      "quantity": "Quantity",
+      "action": "Action"
+    },
+    "create": {
+      "title": "Create Book",
+      "description": "You must enter an unique bar code that has not been chosen.",
+      "barCodeTaken": "This bar code is already taken.",
+      "success": "Book created successfully.",
+      "error": "Failed to create book."
+    },
+    "edit": {
+      "title": "Edit Book",
+      "description": "The bar code must be unique.",
+      "success": "Book updated successfully.",
+      "error": "Could not update the book."
+    },
+    "delete": {
+      "success": "Book deleted permanently.",
+      "error": "Could not delete the book."
+    }
+  },
+  "Members": {
+    "title": "Members",
+    "description": "Manage and view all registered library members.",
+    "searchPlaceholder": "Search by name, email or phone number...",
+    "table": {
+      "id": "ID",
+      "firstName": "First Name",
+      "lastName": "Last Name",
+      "email": "Email",
+      "phoneNumber": "Phone Number",
+      "memberSince": "Member Since",
+      "action": "Action"
+    },
+    "create": {
+      "title": "Create Member",
+      "description": "Enter the details of the new member.",
+      "emailTaken": "This email is already taken.",
+      "success": "Member created successfully.",
+      "error": "Failed to create member."
+    },
+    "edit": {
+      "title": "Edit Member",
+      "success": "Member updated successfully.",
+      "error": "Could not update the member."
+    },
+    "delete": {
+      "success": "Member deleted permanently.",
+      "error": "Could not delete the member."
+    }
+  },
+  "Loans": {
+    "title": "Loans",
+    "description": "Manage and view all loans.",
+    "searchPlaceholder": "Search by book's bar code or by member's email...",
+    "table": {
+      "id": "ID",
+      "memberEmail": "Member Email",
+      "bookTitle": "Book Title",
+      "startDate": "Start Date",
+      "endDate": "End Date",
+      "returnState": "Return State",
+      "renewalCount": "Renewal Count",
+      "action": "Action"
+    },
+    "status": {
+      "returned": "Returned",
+      "unreturned": "Unreturned"
+    },
+    "actions": {
+      "makeLoan": "Make a loan",
+      "renew": "Renew",
+      "return": "Return",
+      "unreturn": "Unreturn"
+    },
+    "create": {
+      "title": "Make Loan",
+      "description": "You can link members and books here.",
+      "bookBarCode": "Book's Bar Code",
+      "memberEmail": "Member's Email",
+      "endDate": "Loan End Date",
+      "bookNotFound": "This book does not exist.",
+      "memberNotFound": "This email does not exist.",
+      "success": "Loan created successfully.",
+      "error": "Failed to make loan."
+    },
+    "edit": {
+      "title": "Edit Loan",
+      "description": "Here you can correct mistakes on loans.",
+      "success": "Loan updated successfully.",
+      "error": "Could not update the loan."
+    },
+    "delete": {
+      "success": "Loan deleted permanently.",
+      "error": "Could not delete the loan."
+    },
+    "renew": {
+      "success": "Loan renewed successfully.",
+      "error": "Could not renew the loan."
+    },
+    "returnAction": {
+      "success": "Loan return state changed successfully.",
+      "error": "Could not change the return state of the loan."
+    }
+  },
+  "Dashboard": {
+    "cards": {
+      "registeredBooks": "Registered Books",
+      "registeredMembers": "Registered Members",
+      "activeLoans": "Active Loans",
+      "overdueLoans": "Unreturned Overdue Loans"
+    },
+    "charts": {
+      "loansTitle": "Past Loans and Returns over Time",
+      "loansDescription": "Double bar and line chart",
+      "loansLabel": "Due and Overdue Loans",
+      "returnsLabel": "Returned Loans",
+      "membersTitle": "New Members over Time",
+      "membersDescription": "Double bar and line chart",
+      "membersLabel": "New Members"
+    }
+  },
+  "Settings": {
+    "title": "Settings",
+    "description": "Manage the app's default settings here."
+  },
+  "Chart": {
+    "day": "Day",
+    "week": "Week",
+    "month": "Month",
+    "area": "Area",
+    "bar": "Bar",
+    "noData": "No data for this period.",
+    "points": "points",
+    "sumBy": "sum by",
+    "rawEntries": "raw entries",
+    "analytics": "Analytics"
+  }
+}

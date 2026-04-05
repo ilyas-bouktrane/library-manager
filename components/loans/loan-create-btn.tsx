@@ -28,8 +28,13 @@ import { createLoan } from "@/app/actions/loan";
 import { DatePicker } from "../others/date-picker";
 import { useSettings } from "../settings/settings-context";
 import { addDays } from "date-fns";
+import { useTranslations } from "next-intl";
 
 export const LoanCreateButton = () => {
+  const t = useTranslations("Loans.create");
+  const tActions = useTranslations("Actions");
+  const tLoanActions = useTranslations("Loans.actions");
+
   const { LOAN_DURATION_DAYS } = useSettings();
   const INIT_END_DATE = addDays(new Date(), Number(LOAN_DURATION_DAYS));
 
@@ -52,7 +57,7 @@ export const LoanCreateButton = () => {
   useEffect(() => {
     if (createLoanState.success) {
       router.refresh();
-      toast.success("Loan created successfully.", { position: "top-center" });
+      toast.success(t("success"), { position: "top-center" });
       setShowDialog(false);
       setInputLoanData({
         email: "",
@@ -60,7 +65,7 @@ export const LoanCreateButton = () => {
         end_date: INIT_END_DATE,
       });
     } else if (!createLoanState.success && createLoanState.timestamp) {
-      toast.error("Failed to make loan.", { position: "top-center" });
+      toast.error(t("error"), { position: "top-center" });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [createLoanState.timestamp]);
@@ -69,7 +74,7 @@ export const LoanCreateButton = () => {
     <Dialog open={showDialog} onOpenChange={setShowDialog}>
       <DialogTrigger>
         <Button variant={"outline"}>
-          <Plus /> Make a loan
+          <Plus /> {tLoanActions("makeLoan")}
         </Button>
       </DialogTrigger>
       <DialogContent>
@@ -77,21 +82,21 @@ export const LoanCreateButton = () => {
           <DialogTitle hidden />
           <DialogDescription hidden />
           <FieldSet>
-            <FieldLegend>Make Loan</FieldLegend>
+            <FieldLegend>{t("title")}</FieldLegend>
             <FieldDescription>
-              You can link members and books here.
+              {t("description")}
             </FieldDescription>
             <form action={createLoanAction}>
               <FieldGroup>
                 <Field>
                   <FieldLabel htmlFor="bar_code">
-                    Book&apos;s Bar Code
+                    {t("bookBarCode")}
                   </FieldLabel>
                   <Input
                     id="bar_code"
                     name="bar_code"
                     autoComplete="off"
-                    placeholder="Bar code"
+                    placeholder={t("bookBarCode")}
                     aria-invalid={createLoanState.not_found === "book"}
                     value={inputLoanData.bar_code}
                     onChange={(e) =>
@@ -102,16 +107,16 @@ export const LoanCreateButton = () => {
                     }
                   />
                   {createLoanState.not_found === "book" && (
-                    <FieldError>This book does not exist.</FieldError>
+                    <FieldError>{t("bookNotFound")}</FieldError>
                   )}
-                  <FieldLabel htmlFor="email">Member&apos;s Email</FieldLabel>
+                  <FieldLabel htmlFor="email">{t("memberEmail")}</FieldLabel>
                   <Input
                     id="email"
                     name="email"
                     type="email"
                     autoComplete="off"
                     aria-invalid={createLoanState.not_found === "member"}
-                    placeholder="Email"
+                    placeholder={t("memberEmail")}
                     value={inputLoanData.email}
                     onChange={(e) =>
                       setInputLoanData((prev) => ({
@@ -121,9 +126,9 @@ export const LoanCreateButton = () => {
                     }
                   />
                   {createLoanState.not_found === "member" && (
-                    <FieldError>This email does not exist.</FieldError>
+                    <FieldError>{t("memberNotFound")}</FieldError>
                   )}
-                  <FieldLabel htmlFor="author">Loan End Date</FieldLabel>
+                  <FieldLabel htmlFor="author">{t("endDate")}</FieldLabel>
                   <DatePicker
                     date={inputLoanData.end_date}
                     onDateChange={(date) =>
@@ -151,7 +156,7 @@ export const LoanCreateButton = () => {
                     }
                     className="flex-1"
                   >
-                    Create
+                    {tActions("create")}
                   </Button>
                   <Button
                     type="button"
@@ -159,7 +164,7 @@ export const LoanCreateButton = () => {
                     onClick={() => setShowDialog(false)}
                     variant={"secondary"}
                   >
-                    Cancel
+                    {tActions("cancel")}
                   </Button>
                 </Field>
               </FieldGroup>

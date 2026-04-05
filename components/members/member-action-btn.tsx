@@ -35,12 +35,17 @@ import { toast } from "sonner";
 import { Input } from "../ui/input";
 import { Member } from "@/generated/prisma/client";
 import { isEqual } from "lodash";
+import { useTranslations } from "next-intl";
 
 export const MemberActionButton = ({
   prevMemberData,
 }: {
   prevMemberData: Member;
 }) => {
+  const t = useTranslations("Members");
+  const tActions = useTranslations("Actions");
+  const tTable = useTranslations("Members.table");
+
   const router = useRouter();
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [showEditDialog, setShowEditDialog] = useState(false);
@@ -59,10 +64,10 @@ export const MemberActionButton = ({
   useEffect(() => {
     if (deleteMemberState.success) {
       router.refresh();
-      toast.success("Member deleted permanently.", { position: "top-center" });
+      toast.success(t("delete.success"), { position: "top-center" });
       setShowDeleteDialog(false);
     } else if (!deleteMemberState.success && deleteMemberState.timestamp) {
-      toast.error("Could not delete the member.", { position: "top-center" });
+      toast.error(t("delete.error"), { position: "top-center" });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [deleteMemberState.timestamp]);
@@ -70,10 +75,10 @@ export const MemberActionButton = ({
   useEffect(() => {
     if (updateMemberState.success) {
       router.refresh();
-      toast.success("Member updated successfully.", { position: "top-center" });
+      toast.success(t("edit.success"), { position: "top-center" });
       setShowEditDialog(false);
     } else if (!updateMemberState.success && updateMemberState.timestamp) {
-      toast.error("Could not update the member.", { position: "top-center" });
+      toast.error(t("edit.error"), { position: "top-center" });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [updateMemberState.timestamp]);
@@ -87,7 +92,7 @@ export const MemberActionButton = ({
       </DropdownMenuTrigger>
       <DropdownMenuContent>
         <DropdownMenuGroup>
-          <DropdownMenuLabel>Action</DropdownMenuLabel>
+          <DropdownMenuLabel>{tActions("action")}</DropdownMenuLabel>
           <Dialog open={showEditDialog} onOpenChange={setShowEditDialog}>
             <DialogTrigger asChild>
               <DropdownMenuItem
@@ -97,7 +102,7 @@ export const MemberActionButton = ({
                 }}
               >
                 <SquarePen />
-                Edit
+                {tActions("edit")}
               </DropdownMenuItem>
             </DialogTrigger>
             <DialogContent>
@@ -105,9 +110,9 @@ export const MemberActionButton = ({
                 <DialogTitle hidden />
                 <DialogDescription hidden />
                 <FieldSet>
-                  <FieldLegend>Edit Member</FieldLegend>
+                  <FieldLegend>{t("edit.title")}</FieldLegend>
                   <FieldDescription>
-                    You must enter an email that has not been chosen
+                    {t("create.description")}
                   </FieldDescription>
                   <form action={updateMemberAction}>
                     <input
@@ -118,12 +123,12 @@ export const MemberActionButton = ({
                     />
                     <FieldGroup>
                       <Field>
-                        <FieldLabel htmlFor="first_name">First Name</FieldLabel>
+                        <FieldLabel htmlFor="first_name">{tTable("firstName")}</FieldLabel>
                         <Input
                           id="first_name"
                           name="first_name"
                           autoComplete="off"
-                          placeholder="First Name"
+                          placeholder={tTable("firstName")}
                           value={memberData.first_name}
                           onChange={(e) =>
                             setMemberData((prev) => ({
@@ -132,12 +137,12 @@ export const MemberActionButton = ({
                             }))
                           }
                         />
-                        <FieldLabel htmlFor="last_name">Last Name</FieldLabel>
+                        <FieldLabel htmlFor="last_name">{tTable("lastName")}</FieldLabel>
                         <Input
                           id="last_name"
                           name="last_name"
                           autoComplete="off"
-                          placeholder="Last Name"
+                          placeholder={tTable("lastName")}
                           value={memberData.last_name}
                           onChange={(e) =>
                             setMemberData((prev) => ({
@@ -146,7 +151,7 @@ export const MemberActionButton = ({
                             }))
                           }
                         />
-                        <FieldLabel htmlFor="email">Email</FieldLabel>
+                        <FieldLabel htmlFor="email">{tTable("email")}</FieldLabel>
                         <Input
                           id="email"
                           type="email"
@@ -164,11 +169,10 @@ export const MemberActionButton = ({
                         />
                         {updateMemberState.emailTaken && (
                           <FieldError>
-                            This email is already taken. Please chose another
-                            one.
+                            {t("create.emailTaken")}
                           </FieldError>
                         )}
-                        <FieldLabel htmlFor="phone_number">Phone</FieldLabel>
+                        <FieldLabel htmlFor="phone_number">{tTable("phoneNumber")}</FieldLabel>
                         <Input
                           id="phone_number"
                           name="phone_number"
@@ -192,7 +196,7 @@ export const MemberActionButton = ({
                           }
                           className="flex-1"
                         >
-                          Apply
+                          {tActions("apply")}
                         </Button>
                         <Button
                           type="button"
@@ -200,7 +204,7 @@ export const MemberActionButton = ({
                           onClick={() => setShowEditDialog(false)}
                           variant={"secondary"}
                         >
-                          Cancel
+                          {tActions("cancel")}
                         </Button>
                       </Field>
                     </FieldGroup>
@@ -220,15 +224,14 @@ export const MemberActionButton = ({
                 }}
               >
                 <Trash />
-                Delete
+                {tActions("delete")}
               </DropdownMenuItem>
             </DialogTrigger>
             <DialogContent>
               <DialogHeader>
-                <DialogTitle>Are you absolutely sure?</DialogTitle>
+                <DialogTitle>{tActions("areYouSure")}</DialogTitle>
                 <DialogDescription>
-                  This action cannot be undone. This will permanently delete the
-                  account and remove its data from our servers.
+                  {tActions("cannotBeUndone")}
                 </DialogDescription>
                 <div className="flex gap-2 w-full">
                   <form action={deleteMemberAction} className="flex-1">
@@ -238,7 +241,7 @@ export const MemberActionButton = ({
                       variant={"destructive"}
                       disabled={deleteMemberIsPending}
                     >
-                      Permanently Delete
+                      {tActions("permanentlyDelete")}
                     </Button>
                     <input
                       readOnly
@@ -252,7 +255,7 @@ export const MemberActionButton = ({
                     className="flex-1"
                     variant={"secondary"}
                   >
-                    Cancel
+                    {tActions("cancel")}
                   </Button>
                 </div>
               </DialogHeader>

@@ -11,15 +11,17 @@ import { ThemeToggle } from "../theme/theme-toggle";
 import { NavLink } from "./nav-link";
 import { getSettings } from "@/lib/settings";
 import { LanguageToggle } from "./lang-toggle";
+import { getTranslations } from "next-intl/server";
 
 export const Header = async () => {
+  const t = await getTranslations("Navigation");
   const { LIBRARY_NAME } = await getSettings();
   const pages = [
-    { Icon: <LayoutDashboard />, label: "Dashboard", link: "/dashboard" },
-    { Icon: <Album />, label: "Loans", link: "/loans" },
-    { Icon: <Book />, label: "Books", link: "/books" },
-    { Icon: <Users />, label: "Members", link: "/members" },
-    { Icon: <Settings />, label: "Settings", link: "/settings" },
+    { Icon: <LayoutDashboard />, label: t("dashboard"), link: "/dashboard" },
+    { Icon: <Album />, label: t("loans"), link: "/loans" },
+    { Icon: <Book />, label: t("books"), link: "/books" },
+    { Icon: <Users />, label: t("members"), link: "/members" },
+    { Icon: <Settings />, label: t("settings"), link: "/settings" },
   ];
 
   return (

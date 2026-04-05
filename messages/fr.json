@@ -1,1 +1,184 @@
-{}
+{
+  "Metadata": {
+    "title": "Gestionnaire de Bibliothèque",
+    "description": "Un système qui aide les gestionnaires de bibliothèque à organiser efficacement les collections de livres et à suivre les emprunts des membres à l'aide d'une base de données automatisée. Il gère la disponibilité des livres, les dossiers des emprunteurs et les dates de retour tout en automatisant les notifications par e-mail pour les articles en retard."
+  },
+  "Navigation": {
+    "dashboard": "Tableau de bord",
+    "loans": "Emprunts",
+    "books": "Livres",
+    "members": "Membres",
+    "settings": "Paramètres"
+  },
+  "Actions": {
+    "search": "Rechercher",
+    "reset": "Réinitialiser",
+    "add": "Ajouter",
+    "create": "Créer",
+    "cancel": "Annuler",
+    "edit": "Modifier",
+    "delete": "Supprimer",
+    "apply": "Appliquer",
+    "update": "Mettre à jour",
+    "permanentlyDelete": "Supprimer définitivement",
+    "areYouSure": "Êtes-vous absolument sûr ?",
+    "cannotBeUndone": "Cette action ne peut pas être annulée. Cela supprimera définitivement l'élément et retirera ses données de nos serveurs.",
+    "close": "Fermer",
+    "action": "Action",
+    "results": "résultats",
+    "result": "résultat"
+  },
+  "Books": {
+    "title": "Livres",
+    "description": "Gérez et visualisez tous les livres enregistrés dans la bibliothèque.",
+    "searchPlaceholder": "Rechercher par titre, auteur ou code-barres...",
+    "table": {
+      "id": "ID",
+      "barCode": "Code-barres",
+      "title": "Titre",
+      "author": "Auteur",
+      "quantity": "Quantité",
+      "action": "Action"
+    },
+    "create": {
+      "title": "Créer un livre",
+      "description": "Vous devez entrer un code-barres unique qui n'a pas été choisi.",
+      "barCodeTaken": "Ce code-barres est déjà utilisé.",
+      "success": "Livre créé avec succès.",
+      "error": "Échec de la création du livre."
+    },
+    "edit": {
+      "title": "Modifier le livre",
+      "description": "Le code-barres doit être unique.",
+      "success": "Livre mis à jour avec succès.",
+      "error": "Impossible de mettre à jour le livre."
+    },
+    "delete": {
+      "success": "Livre supprimé définitivement.",
+      "error": "Impossible de supprimer le livre."
+    }
+  },
+  "Members": {
+    "title": "Membres",
+    "description": "Gérez et visualisez tous les membres inscrits de la bibliothèque.",
+    "searchPlaceholder": "Rechercher par nom, e-mail ou numéro de téléphone...",
+    "table": {
+      "id": "ID",
+      "firstName": "Prénom",
+      "lastName": "Nom",
+      "email": "E-mail",
+      "phoneNumber": "Numéro de téléphone",
+      "memberSince": "Membre depuis",
+      "action": "Action"
+    },
+    "create": {
+      "title": "Créer un membre",
+      "description": "Entrez les détails du nouveau membre.",
+      "emailTaken": "Cet e-mail est déjà utilisé.",
+      "success": "Membre créé avec succès.",
+      "error": "Échec de la création du membre."
+    },
+    "edit": {
+      "title": "Modifier le membre",
+      "success": "Membre mis à jour avec succès.",
+      "error": "Impossible de mettre à jour le membre."
+    },
+    "delete": {
+      "success": "Membre supprimé définitivement.",
+      "error": "Impossible de supprimer le membre."
+    }
+  },
+  "Loans": {
+    "title": "Emprunts",
+    "description": "Gérez et visualisez tous les emprunts.",
+    "searchPlaceholder": "Rechercher par code-barres du livre ou e-mail du membre...",
+    "table": {
+      "id": "ID",
+      "memberEmail": "E-mail du membre",
+      "bookTitle": "Titre du livre",
+      "startDate": "Date de début",
+      "endDate": "Date de fin",
+      "returnState": "État du retour",
+      "renewalCount": "Renouvellements",
+      "action": "Action"
+    },
+    "status": {
+      "returned": "Retourné",
+      "unreturned": "Non retourné"
+    },
+    "actions": {
+      "makeLoan": "Faire un emprunt",
+      "renew": "Renouveler",
+      "return": "Retourner",
+      "unreturn": "Annuler le retour"
+    },
+    "create": {
+      "title": "Faire un emprunt",
+      "description": "Vous pouvez lier des membres et des livres ici.",
+      "bookBarCode": "Code-barres du livre",
+      "memberEmail": "E-mail du membre",
+      "endDate": "Date de fin de l'emprunt",
+      "bookNotFound": "Ce livre n'existe pas.",
+      "memberNotFound": "Cet e-mail n'existe pas.",
+      "success": "Emprunt créé avec succès.",
+      "error": "Échec de la création de l'emprunt."
+    },
+    "edit": {
+      "title": "Modifier l'emprunt",
+      "description": "Ici, vous pouvez corriger les erreurs sur les emprunts.",
+      "success": "Emprunt mis à jour avec succès.",
+      "error": "Impossible de mettre à jour l'emprunt."
+    },
+    "delete": {
+      "success": "Emprunt supprimé définitivement.",
+      "error": "Impossible de supprimer l'emprunt."
+    },
+    "renew": {
+      "success": "Emprunt renouvelé avec succès.",
+      "error": "Impossible de renouveler l'emprunt."
+    },
+    "returnAction": {
+      "success": "L'état de retour de l'emprunt a été modifié avec succès.",
+      "error": "Impossible de modifier l'état de retour de l'emprunt."
+    }
+  },
+  "Dashboard": {
+    "cards": {
+      "registeredBooks": "Livres enregistrés",
+      "registeredMembers": "Membres inscrits",
+      "activeLoans": "Emprunts actifs",
+      "overdueLoans": "Emprunts en retard non retournés"
+    },
+    "cardsDescription": {
+      "registeredBooks": "Nombre total de livres",
+      "registeredMembers": "Nombre total de membres",
+      "activeLoans": "Nombre total d'emprunts en cours",
+      "overdueLoans": "Emprunts dont la date est dépassée"
+    },
+    "charts": {
+      "loansTitle": "Emprunts et Retours passés au fil du temps",
+      "loansDescription": "Graphique à barres doubles et lignes",
+      "loansLabel": "Emprunts dus et en retard",
+      "returnsLabel": "Emprunts retournés",
+      "membersTitle": "Nouveaux membres au fil du temps",
+      "membersDescription": "Graphique à barres doubles et lignes",
+      "membersLabel": "Nouveaux membres"
+    }
+  },
+  "Settings": {
+    "title": "Paramètres",
+    "description": "Gérez les paramètres par défaut de l'application ici."
+  },
+  "Chart": {
+    "day": "Jour",
+    "week": "Semaine",
+    "month": "Mois",
+    "area": "Aire",
+    "bar": "Barres",
+    "noData": "Aucune donnée pour cette période.",
+    "points": "points",
+    "sumBy": "somme par",
+    "rawEntries": "entrées brutes",
+    "analytics": "Analyses"
+  }
+}

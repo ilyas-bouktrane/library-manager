@@ -48,6 +48,7 @@ import {
   updateLoan,
 } from "@/app/actions/loan";
 import { DatePicker } from "../others/date-picker";
+import { useTranslations } from "next-intl";
 
 type LoanData = Pick<Loan, "id" | "end_date" | "is_returned"> &
   Pick<Member, "email"> &
@@ -58,6 +59,10 @@ export const LoanActionButton = ({
 }: {
   prevLoanData: LoanData;
 }) => {
+  const t = useTranslations("Loans");
+  const tActions = useTranslations("Actions");
+  const tLoanActions = useTranslations("Loans.actions");
+
   const router = useRouter();
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [showEditDialog, setShowEditDialog] = useState(false);
@@ -82,10 +87,10 @@ export const LoanActionButton = ({
   useEffect(() => {
     if (deleteLoanState.success) {
       router.refresh();
-      toast.success("Loan deleted permanently.", { position: "top-center" });
+      toast.success(t("delete.success"), { position: "top-center" });
       setShowDeleteDialog(false);
     } else if (!deleteLoanState.success && deleteLoanState.timestamp) {
-      toast.error("Could not delete the loan.", { position: "top-center" });
+      toast.error(t("delete.error"), { position: "top-center" });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [deleteLoanState.timestamp]);
@@ -93,10 +98,10 @@ export const LoanActionButton = ({
   useEffect(() => {
     if (updateLoanState.success) {
       router.refresh();
-      toast.success("Loan updated successfully.", { position: "top-center" });
+      toast.success(t("edit.success"), { position: "top-center" });
       setShowEditDialog(false);
     } else if (!updateLoanState.success && updateLoanState.timestamp) {
-      toast.error("Could not update the loan.", { position: "top-center" });
+      toast.error(t("edit.error"), { position: "top-center" });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [updateLoanState.timestamp]);
@@ -104,12 +109,12 @@ export const LoanActionButton = ({
   useEffect(() => {
     if (returnLoanState.success) {
       router.refresh();
-      toast.success("Loan return state changed successfully.", {
+      toast.success(t("returnAction.success"), {
         position: "top-center",
       });
       setLoanData((prev) => ({ ...prev, is_returned: !prev.is_returned }));
     } else if (!returnLoanState.success && returnLoanState.timestamp) {
-      toast.error("Could not change the return state of the loan.", {
+      toast.error(t("returnAction.error"), {
         position: "top-center",
       });
     }
@@ -119,9 +124,9 @@ export const LoanActionButton = ({
   useEffect(() => {
     if (renewLoanState.success) {
       router.refresh();
-      toast.success("Loan renewed successfully.", { position: "top-center" });
+      toast.success(t("renew.success"), { position: "top-center" });
     } else if (!renewLoanState.success && renewLoanState.timestamp) {
-      toast.error("Could not renew the loan.", { position: "top-center" });
+      toast.error(t("renew.error"), { position: "top-center" });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [renewLoanState.timestamp]);
@@ -133,9 +138,9 @@ export const LoanActionButton = ({
           <Settings2 />
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent>
+      <DropdownMenuContent className="w-fit">
         <DropdownMenuGroup>
-          <DropdownMenuLabel>Action</DropdownMenuLabel>
+          <DropdownMenuLabel>{tActions("action")}</DropdownMenuLabel>
           <form action={renewLoanAction}>
             <input readOnly type="hidden" name="id" value={loanData.id} />
             <DropdownMenuItem asChild>
@@ -145,7 +150,7 @@ export const LoanActionButton = ({
                 className="flex w-full items-center gap-1"
               >
                 <RotateCcw />
-                Renew
+                {tLoanActions("renew")}
               </button>
             </DropdownMenuItem>
           </form>
@@ -160,12 +165,12 @@ export const LoanActionButton = ({
                 {loanData.is_returned ? (
                   <>
                     <CircleX />
-                    Unreturn
+                    {tLoanActions("unreturn")}
                   </>
                 ) : (
                   <>
                     <CircleCheckBig />
-                    Return
+                    {tLoanActions("return")}
                   </>
                 )}
               </button>
@@ -180,7 +185,7 @@ export const LoanActionButton = ({
                 }}
               >
                 <SquarePen />
-                Edit
+                {tActions("edit")}
               </DropdownMenuItem>
             </DialogTrigger>
             <DialogContent>
@@ -188,10 +193,8 @@ export const LoanActionButton = ({
                 <DialogTitle hidden />
                 <DialogDescription hidden />
                 <FieldSet>
-                  <FieldLegend>Edit Loan</FieldLegend>
-                  <FieldDescription>
-                    Here you can correct mistakes on loans.
-                  </FieldDescription>
+                  <FieldLegend>{t("edit.title")}</FieldLegend>
+                  <FieldDescription>{t("edit.description")}</FieldDescription>
                   <form action={updateLoanAction}>
                     <input
                       readOnly
@@ -202,13 +205,13 @@ export const LoanActionButton = ({
                     <FieldGroup>
                       <Field>
                         <FieldLabel htmlFor="bar_code">
-                          Book&apos;s Bar Code
+                          {t("create.bookBarCode")}
                         </FieldLabel>
                         <Input
                           id="bar_code"
                           name="bar_code"
                           autoComplete="off"
-                          placeholder="Bar code"
+                          placeholder={t("create.bookBarCode")}
                           aria-invalid={updateLoanState.not_found === "book"}
                           value={loanData.bar_code}
                           onChange={(e) =>
@@ -219,10 +222,10 @@ export const LoanActionButton = ({
                           }
                         />
                         {updateLoanState.not_found === "book" && (
-                          <FieldError>This book does not exist.</FieldError>
+                          <FieldError>{t("create.bookNotFound")}</FieldError>
                         )}
                         <FieldLabel htmlFor="email">
-                          Member&apos;s Email
+                          {t("create.memberEmail")}
                         </FieldLabel>
                         <Input
                           id="email"
@@ -230,7 +233,7 @@ export const LoanActionButton = ({
                           type="email"
                           autoComplete="off"
                           aria-invalid={updateLoanState.not_found === "member"}
-                          placeholder="Email"
+                          placeholder={t("create.memberEmail")}
                           value={loanData.email}
                           onChange={(e) =>
                             setLoanData((prev) => ({
@@ -240,9 +243,11 @@ export const LoanActionButton = ({
                           }
                         />
                         {updateLoanState.not_found === "member" && (
-                          <FieldError>This email does not exist.</FieldError>
+                          <FieldError>{t("create.memberNotFound")}</FieldError>
                         )}
-                        <FieldLabel htmlFor="author">Loan End Date</FieldLabel>
+                        <FieldLabel htmlFor="author">
+                          {t("create.endDate")}
+                        </FieldLabel>
                         <DatePicker
                           date={loanData.end_date}
                           onDateChange={(date) => {
@@ -272,7 +277,7 @@ export const LoanActionButton = ({
                           }
                           className="flex-1"
                         >
-                          Update
+                          {tActions("update")}
                         </Button>
                         <Button
                           type="button"
@@ -280,7 +285,7 @@ export const LoanActionButton = ({
                           onClick={() => setShowEditDialog(false)}
                           variant={"secondary"}
                         >
-                          Cancel
+                          {tActions("cancel")}
                         </Button>
                       </Field>
                     </FieldGroup>
@@ -300,15 +305,14 @@ export const LoanActionButton = ({
                 }}
               >
                 <Trash />
-                Delete
+                {tActions("delete")}
               </DropdownMenuItem>
             </DialogTrigger>
             <DialogContent>
               <DialogHeader>
-                <DialogTitle>Are you absolutely sure?</DialogTitle>
+                <DialogTitle>{tActions("areYouSure")}</DialogTitle>
                 <DialogDescription>
-                  This action cannot be undone. This will permanently delete the
-                  loan and remove its data from our servers.
+                  {tActions("cannotBeUndone")}
                 </DialogDescription>
                 <div className="flex gap-2 w-full">
                   <form action={deleteLoanAction} className="flex-1">
@@ -318,7 +322,7 @@ export const LoanActionButton = ({
                       variant={"destructive"}
                       disabled={deleteLoanIsPending}
                     >
-                      Permanently Delete
+                      {tActions("permanentlyDelete")}
                     </Button>
                     <input
                       readOnly
@@ -332,7 +336,7 @@ export const LoanActionButton = ({
                     className="flex-1"
                     variant={"secondary"}
                   >
-                    Cancel
+                    {tActions("cancel")}
                   </Button>
                 </div>
               </DialogHeader>
