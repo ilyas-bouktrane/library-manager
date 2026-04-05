@@ -5,11 +5,9 @@ import { LoanRenewalEmail } from "@/components/resend/renew-confirmation-templat
 import { LoanReturnEmail } from "@/components/resend/return-confirmation-template";
 import { Book, Loan, Member, Prisma } from "@/generated/prisma/client";
 import { db } from "@/lib/db";
+import { getResend } from "@/lib/resend";
 import { getSettings } from "@/lib/settings";
 import { addDays } from "date-fns";
-import { Resend } from "resend";
-
-const resend = new Resend(process.env.RESEND_API_KEY);
 
 type DeleteLoan = {
   timestamp: number;
@@ -59,7 +57,7 @@ export const returnLoan = async (
       },
     });
 
-    const emailConfirmation = await resend.emails.send({
+    const emailConfirmation = await getResend().emails.send({
       from: `${LIBRARY_NAME} <${process.env.RESEND_SENDER_EMAIL || "onboarding@resend.dev"}>`,
       to: result.member.email,
       subject: "Return Confirmed - Library Notification",
@@ -103,7 +101,7 @@ export const renewLoan = async (
       },
     });
 
-    const emailConfirmation = await resend.emails.send({
+    const emailConfirmation = await getResend().emails.send({
       from: `${LIBRARY_NAME} <${process.env.RESEND_SENDER_EMAIL || "onboarding@resend.dev"}>`,
       to: result.member.email,
       subject: "Loan Renewed - Library Notification",
@@ -224,7 +222,7 @@ export const createLoan = async (
       },
     });
 
-    const emailConfirmation = await resend.emails.send({
+    const emailConfirmation = await getResend().emails.send({
       from: `${LIBRARY_NAME} <${process.env.RESEND_SENDER_EMAIL || "onboarding@resend.dev"}>`,
       to: result.member.email,
       subject: "Loan Confirmed - Library Notification",

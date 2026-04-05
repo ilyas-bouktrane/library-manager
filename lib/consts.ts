@@ -8,4 +8,4 @@ export const DEFAULT_LOAN_DURATION_DAYS = 30; // days
 
 export const DEFAULT_LIBRARY_NAME = "Library Manager";
 
-export const DEFAULT_REMINDERS_DAYS_BEFORE = "7,3,1";
+export const DEFAULT_REMINDERS_DAYS_BEFORE = "7,3,1"; // days

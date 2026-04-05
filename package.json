@@ -6,17 +6,18 @@
     "dev": "bun --bun next dev",
     "build": "bun --bun next build",
     "start": "bun --bun next start",
-    "lint": "eslint"
+    "deploy": "bunx --bun prisma migrate deploy && bunx --bun prisma generate && bun --bun next start"
   },
   "dependencies": {
     "@prisma/adapter-pg": "^7.5.0",
-    "@prisma/client": "^7.5.0",
+    "@prisma/client": "^7.6.0",
     "@react-email/components": "^1.0.11",
     "@react-email/render": "^2.0.5",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "country-flag-icons": "^1.6.15",
     "date-fns": "^4.1.0",
+    "dotenv": "^17.4.1",
     "lodash": "^4.17.23",
     "lucide-react": "^1.7.0",
     "next": "16.2.1",
@@ -44,7 +45,7 @@
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.2.1",
-    "prisma": "^7.5.0",
+    "prisma": "^7.6.0",
     "tailwindcss": "^4",
     "typescript": "^5"
   }

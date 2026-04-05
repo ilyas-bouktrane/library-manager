@@ -25,6 +25,8 @@ import { BookCreateButton } from "@/components/books/book-create-btn";
 import { Prisma } from "@/generated/prisma/client";
 import { setRequestLocale, getTranslations } from "next-intl/server";
 
+export const dynamic = "force-dynamic";
+
 export default async function Books({
   searchParams,
   params,

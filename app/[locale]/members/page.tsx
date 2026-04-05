@@ -25,6 +25,8 @@ import { Users } from "lucide-react";
 import { Prisma } from "@/generated/prisma/client";
 import { setRequestLocale, getTranslations } from "next-intl/server";
 
+export const dynamic = "force-dynamic";
+
 export default async function Members({
   searchParams,
   params,

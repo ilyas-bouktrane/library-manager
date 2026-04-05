@@ -1,0 +1,11 @@
+node_modules
+.next
+.git
+.env
+.env.local
+.vercel
+README.md
+Dockerfile
+bun.lock
+bun.lockb
+*.log

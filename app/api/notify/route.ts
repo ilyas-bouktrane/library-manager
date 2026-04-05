@@ -1,12 +1,10 @@
 import { LoanReminderEmail } from "@/components/resend/due-reminder-template";
 import { OverdueNoticeEmail } from "@/components/resend/overdue-notice-template";
 import { db } from "@/lib/db";
+import { getResend } from "@/lib/resend";
 import { getSettings } from "@/lib/settings";
 import { addDays } from "date-fns";
 import { headers } from "next/headers";
-import { Resend } from "resend";
-
-const resend = new Resend(process.env.RESEND_API_KEY);
 
 export async function POST() {
   const { LIBRARY_NAME, REMINDERS_DAYS_BEFORE } = await getSettings();
@@ -68,7 +66,7 @@ export async function POST() {
 
     await Promise.all([
       ...dueLoans.map((loan) =>
-        resend.emails.send({
+        getResend().emails.send({
           from: `${LIBRARY_NAME} <${process.env.RESEND_SENDER_EMAIL || "onboarding@resend.dev"}>`,
           to: loan.member.email,
           subject: "Loan Reminder - Library Notification",
@@ -76,7 +74,7 @@ export async function POST() {
         }),
       ),
       ...overDueLoans.map((loan) =>
-        resend.emails.send({
+        getResend().emails.send({
           from: `${LIBRARY_NAME} <${process.env.RESEND_SENDER_EMAIL || "onboarding@resend.dev"}>`,
           to: loan.member.email,
           subject: "Overdue Notice - Library Notification",
